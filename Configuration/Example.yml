@@ -1,0 +1,19 @@
+--
+TYPO3:
+  BE:
+    Permissions:
+      keyParts:
+        - isUserGroup
+        - hasDoktype
+        - hasBackendLayout
+        - hasColumnPosition
+      ruleSets:
+        82_1_homepage_2:
+          contentElements:
+            - image
+            - textpic
+            - companytoolbox_cardgrid
+            - gridelements_view
+          plugins:
+            - companycalendar_pi1
+            - companycalendar_pi2
