@@ -1,14 +1,14 @@
---
 TYPO3:
   BE:
     Permissions:
-      keyParts:
-        - isUserGroup
-        - hasDoktype
-        - hasBackendLayout
-        - hasColumnPosition
       ruleSets:
         82_1_homepage_2:
+          userFunctions:
+            - isInUserGroup
+            - hasDoktype
+            - hasBackendLayout
+            - hasColumnPosition
+          operator: '&&'
           contentElements:
             - image
             - textpic

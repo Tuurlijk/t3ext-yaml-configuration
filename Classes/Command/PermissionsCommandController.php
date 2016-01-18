@@ -23,6 +23,10 @@ namespace MaxServ\Permissions\Command;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use Symfony\Component\Yaml\Yaml;
+use TYPO3\CMS\Core\Package\PackageInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 /**
  * Generate TSConfig configuration files from a YAML configuration
@@ -33,14 +37,111 @@ namespace MaxServ\Permissions\Command;
 class PermissionsCommandController extends AbstractCommandController
 {
     /**
-     * Generate TSConfig configuration files from a YAML configuration
+     * Relative path to the Permission Configuration directory
      *
-     * @param string $configurationFile
+     * @var string
+     */
+    const PERMISSIONS_CONFIGURATION_DIRECTORY = 'Configuration/Permissions/';
+
+    /**
+     * Condition Class prefix
+     *
+     * @var string
+     */
+    const CONDITION_PREFIX = 'MaxServ\Permissions\User\Condition::';
+
+    /**
+     * Generate TSConfig configuration files from a YAML configuration
+     * \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig
      *
      * @return void
      */
-    public function generateCommand($configurationFile = 'Example.yml')
+    public function generateCommand()
     {
-//        $this->message('ohai');
+        $this->headerMessage('Generating permssions');
+        $lines = array();
+        foreach ($this->findPermissionFiles() as $configurationFile) {
+            $configuration = $this->parseConfigurationFile($configurationFile);
+
+            $this->infoMessage('Parsing: ' . str_replace(PATH_site, '', $configurationFile));
+            if ($configuration !== null && count($configuration) === 1) {
+                if (isset($configuration['TYPO3']['BE']['Permissions'])
+                    && isset($configuration['TYPO3']['BE']['Permissions']['ruleSets'])
+                    && is_array($configuration['TYPO3']['BE']['Permissions']['ruleSets'])
+                ) {
+                    $ruleSets = $configuration['TYPO3']['BE']['Permissions']['ruleSets'];
+                    foreach ($ruleSets as $key => $ruleSet) {
+                        $conditionLineParts = array();
+                        $operator = ($ruleSet['operator']) ?: '&&';
+                        $userFunctions = $ruleSet['userFunctions'];
+                        foreach (explode('_', $key) as $index => $value) {
+                            $conditionLineParts[] = '[userFunc = ' . self::CONDITION_PREFIX . $userFunctions[$index] . '('. $value .')]';
+                        }
+                        $lines[] = implode(' ' . $operator . ' ', $conditionLineParts);
+                    }
+                    var_dump($lines);
+                }
+            }
+        }
+    }
+
+    /**
+     * Find permission files in all active extensions
+     *
+     * @return array
+     */
+    protected function findPermissionFiles()
+    {
+        /** @var \TYPO3\CMS\Core\Package\PackageManager $packageManager */
+        $packageManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Package\\PackageManager');
+        $activePackages = $packageManager->getActivePackages();
+
+        $configurationFiles = array();
+        foreach ($activePackages as $package) {
+//            if ($package->getPackageKey() === 'permissions') {
+//                continue;
+//            }
+            if (!($package instanceof PackageInterface)) {
+                continue;
+            }
+            $packagePath = $package->getPackagePath();
+            if (!is_dir($packagePath . self::PERMISSIONS_CONFIGURATION_DIRECTORY)) {
+                continue;
+            }
+            $configurationFiles = array_merge(
+                $configurationFiles,
+                GeneralUtility::getFilesInDir(
+                    $packagePath . self::PERMISSIONS_CONFIGURATION_DIRECTORY,
+                    'yaml,yml',
+                    true
+                )
+            );
+        }
+
+        return $configurationFiles;
+    }
+
+    /**
+     * Check if the configuration file exists and if the Yaml parser is
+     * available
+     *
+     * @param $configurationFile
+     *
+     * @return array|null
+     */
+    protected function parseConfigurationFile($configurationFile)
+    {
+        $configuration = null;
+        if (!empty($configurationFile)
+            && is_file($configurationFile)
+            && is_callable(array(
+                'Symfony\\Component\\Yaml\\Yaml',
+                'parse'
+            ))
+        ) {
+            $configuration = Yaml::parse(file_get_contents($configurationFile));
+        }
+
+        return $configuration;
     }
 }

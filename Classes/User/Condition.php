@@ -1,5 +1,5 @@
 <?php
-namespace MaxServ\Permission\User;
+namespace MaxServ\Permissions\User;
 
 /**
  *  Copyright notice
@@ -40,7 +40,7 @@ class Condition
     /**
      * @var DatabaseConnection
      */
-    protected static $databaseConnection = null;
+    protected $databaseConnection = null;
 
     /**
      * setter for backendUser object
@@ -61,7 +61,7 @@ class Condition
      *
      * @return BackendUserAuthentication $backendUser
      */
-    public function getBackendUser()
+    public static function getBackendUser()
     {
         return (self::$backendUser) ?: self::setBackendUser($GLOBALS['BE_USER']);
     }
@@ -75,9 +75,9 @@ class Condition
      */
     public function setDatabaseConnection(DatabaseConnection $databaseConnection)
     {
-        self::$databaseConnection = $databaseConnection;
+        $this->databaseConnection = $databaseConnection;
 
-        return self::$databaseConnection;
+        return $this->databaseConnection;
     }
 
     /**
@@ -87,7 +87,7 @@ class Condition
      */
     public function getDatabaseConnection()
     {
-        return (self::$databaseConnection) ?: self::setDatabaseConnection($GLOBALS['TYPO3_DB']);
+        return ($this->databaseConnection) ?: $this->setDatabaseConnection($GLOBALS['TYPO3_DB']);
     }
 
     /**
@@ -141,9 +141,9 @@ class Condition
             } else {
                 $pid = (int)substr(strrchr($get['returnUrl'], '='), 1);
             }
-            $queryResult = self::getDatabaseConnection()->sql_query('SELECT backend_layout FROM pages WHERE uid =' . $pid);
-            $row = self::getDatabaseConnection()->sql_fetch_assoc($queryResult);
-            self::getDatabaseConnection()->sql_free_result($queryResult);
+            $queryResult = $this->getDatabaseConnection()->sql_query('SELECT backend_layout FROM pages WHERE uid =' . $pid);
+            $row = $this->getDatabaseConnection()->sql_fetch_assoc($queryResult);
+            $this->getDatabaseConnection()->sql_free_result($queryResult);
             $result = $backendLayout === (int)$row['backend_layout'];
 
             // Case 4). Elements pasted from a clipboard
@@ -198,15 +198,15 @@ class Condition
                 $uid = key($getUid);
                 // strip off trailing comma
                 $uid = rtrim($uid, ',');
-                $queryResult = self::getDatabaseConnection()->sql_query('SELECT colPos FROM tt_content WHERE uid =' . (int)abs($uid));
-                $row = self::getDatabaseConnection()->sql_fetch_assoc($queryResult);
-                self::getDatabaseConnection()->sql_free_result($queryResult);
+                $queryResult = $this->getDatabaseConnection()->sql_query('SELECT colPos FROM tt_content WHERE uid =' . (int)abs($uid));
+                $row = $this->getDatabaseConnection()->sql_fetch_assoc($queryResult);
+                $this->getDatabaseConnection()->sql_free_result($queryResult);
                 $result = $colPos === (int)$row['colPos'];
             }
 
             // Case 4). Elements pasted from a clipboard
         } elseif (is_array($get['CB'])) {
-            $newColPosData = $this->backendUser->getSessionData('core.www_tue_ce.newColPos');
+            $newColPosData = self::getBackendUser()->getSessionData('core.www_tue_ce.newColPos');
             if (is_array($newColPosData) && ($colPos == $newColPosData['colPos'])) {
                 $result = true;
             };
@@ -244,9 +244,9 @@ class Condition
                 $uid = key($getUid);
                 // strip off trailing comma
                 $uid = rtrim($uid, ',');
-                $queryResult = self::getDatabaseConnection()->sql_query('SELECT CType FROM tt_content WHERE uid =' . (int)abs($uid));
-                $row = self::getDatabaseConnection()->sql_fetch_assoc($queryResult);
-                self::getDatabaseConnection()->sql_free_result($queryResult);
+                $queryResult = $this->getDatabaseConnection()->sql_query('SELECT CType FROM tt_content WHERE uid =' . (int)abs($uid));
+                $row = $this->getDatabaseConnection()->sql_fetch_assoc($queryResult);
+                $this->getDatabaseConnection()->sql_free_result($queryResult);
                 $result = $cType === $row['CType'];
             }
         }
@@ -282,14 +282,42 @@ class Condition
                 $uid = key($getUid);
                 // strip off trailing comma
                 $uid = rtrim($uid, ',');
-                $queryResult = self::getDatabaseConnection()->sql_query('SELECT list_type FROM tt_content WHERE uid =' . (int)abs($uid));
-                $row = self::getDatabaseConnection()->sql_fetch_assoc($queryResult);
-                self::getDatabaseConnection()->sql_free_result($queryResult);
+                $queryResult = $this->getDatabaseConnection()->sql_query('SELECT list_type FROM tt_content WHERE uid =' . (int)abs($uid));
+                $row = $this->getDatabaseConnection()->sql_fetch_assoc($queryResult);
+                $this->getDatabaseConnection()->sql_free_result($queryResult);
                 $result = $listType === $row['list_type'];
             }
         }
 
         return $result;
+    }
+
+    /**
+     * Check if current Backend user is in the given UserGroup
+     *
+     * @param integer|string $role Identifier of the userGroup
+     *
+     * @return boolean
+     */
+    public function isInUserGroup($role)
+    {
+        if (!is_array(self::getBackendUser()->userGroups)) {
+            return false;
+        }
+        if (is_numeric($role)) {
+            foreach (self::getBackendUser()->userGroups as $userGroup) {
+                if ((int)$userGroup['uid'] === (int)$role) {
+                    return true;
+                }
+            }
+        } else {
+            foreach (self::getBackendUser()->userGroups as $userGroup) {
+                if ($userGroup['title'] === $role) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -323,14 +351,14 @@ class Condition
             } else {
                 $pid = (int)substr(strrchr($get['returnUrl'], '='), 1);
             }
-            $queryResult = self::getDatabaseConnection()->sql_query('SELECT doktype FROM pages WHERE uid =' . $pid);
-            $row = self::getDatabaseConnection()->sql_fetch_assoc($queryResult);
-            self::getDatabaseConnection()->sql_free_result($queryResult);
+            $queryResult = $this->getDatabaseConnection()->sql_query('SELECT doktype FROM pages WHERE uid =' . $pid);
+            $row = $this->getDatabaseConnection()->sql_fetch_assoc($queryResult);
+            $this->getDatabaseConnection()->sql_free_result($queryResult);
             $result = $doktype === (int)$row['doktype'];
 
             // Case 4). Elements pasted from a clipboard
         } elseif (is_array($get['CB'])) {
-            $newColPosData = self::getBackendUser()->getSessionData('core.www_tue_ce.newColPos');
+            $newColPosData = $this->getBackendUser()->getSessionData('core.www_tue_ce.newColPos');
             if (is_array($newColPosData) && ($doktype == $newColPosData['doktype'])) {
                 $result = true;
             }

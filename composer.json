@@ -4,7 +4,8 @@
   "description": "MaxServ permission extension",
 	"license": ["GPL-2.0+"],
 	"require": {
-		"typo3/cms-core": "*"
+		"typo3/cms-core": "*",
+		"symfony/yaml": "~3.0"
 	},
 	"replace": {
 		"permissions": "*"
