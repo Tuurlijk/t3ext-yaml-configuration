@@ -1,16 +1,17 @@
 {
   "name": "maxserv/permissions",
-  "type": "typo3-cms-extension",
+	"type": "typo3-cms-extension",
   "description": "MaxServ permission extension",
-  "license": [
-    "GPL-2.0+"
-  ],
-  "require": {
-    "typo3/cms-core": "^6.2.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "MaxServ\\Permissions\\": "Classes/"
-    }
-  }
+	"license": ["GPL-2.0+"],
+	"require": {
+		"typo3/cms-core": "*"
+	},
+	"replace": {
+		"permissions": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"MaxServ\\Permissions\\": "Classes/"
+		}
+	}
 }
