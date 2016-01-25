@@ -51,6 +51,26 @@ class PermissionsCommandController extends AbstractCommandController
     const CONDITION_PREFIX = 'MaxServ\Permissions\User\Condition::';
 
     /**
+     * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+     */
+    protected $databaseConnection;
+
+    /**
+     * Cache of table column names
+     *
+     * @var array
+     */
+    protected $columnCache = array();
+
+    /**
+     * PermissionsCommandController constructor.
+     */
+    public function __construct()
+    {
+        $this->databaseConnection = $GLOBALS['TYPO3_DB'];
+    }
+
+    /**
      * Generate TSConfig configuration files from a YAML configuration
      * \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig
      *
@@ -59,29 +79,119 @@ class PermissionsCommandController extends AbstractCommandController
     public function generateCommand()
     {
         $this->headerMessage('Generating permssions');
-        $lines = array();
         foreach ($this->findPermissionFiles() as $configurationFile) {
             $configuration = $this->parseConfigurationFile($configurationFile);
 
-            $this->infoMessage('Parsing: ' . str_replace(PATH_site, '', $configurationFile));
-            if ($configuration !== null && count($configuration) === 1) {
-                if (isset($configuration['TYPO3']['BE']['Permissions'])
-                    && isset($configuration['TYPO3']['BE']['Permissions']['ruleSets'])
-                    && is_array($configuration['TYPO3']['BE']['Permissions']['ruleSets'])
-                ) {
-                    $ruleSets = $configuration['TYPO3']['BE']['Permissions']['ruleSets'];
-                    foreach ($ruleSets as $key => $ruleSet) {
+            $this->infoMessage('Parsing: ' . str_replace(PATH_site, '',
+                    $configurationFile));
+            $forms = $this->getFormConfiguration($configuration);
+            foreach ($forms as $table => $ruleSets) {
+                foreach ($ruleSets as $key => $ruleSet) {
+                    $lines = array();
+                    $hasCondition = FALSE;
+                    if (isset($ruleSet['title'])) {
+                        $lines[] = '';
+                        $lines[] = "// " . $ruleSet['title'];
+                    }
+                    if (isset($ruleSet['description'])) {
+                        $lines[] = "// ";
+                        $lines[] = "// " . $ruleSet['description'];
+                        $lines[] = '';
+                    }
+                    if (!in_array($key, $this->getColumnNames($table))
+                        && isset($ruleSet['userFunctions'])
+                    ) {
                         $conditionLineParts = array();
                         $operator = ($ruleSet['operator']) ?: '&&';
-                        $userFunctions = $ruleSet['userFunctions'];
-                        foreach (explode('_', $key) as $index => $value) {
-                            $conditionLineParts[] = '[userFunc = ' . self::CONDITION_PREFIX . $userFunctions[$index] . '('. $value .')]';
+                        foreach ($ruleSet['userFunctions'] as $userFunction) {
+                            $conditionLineParts[] = '[userFunc = ' . self::CONDITION_PREFIX . $userFunction . ']';
                         }
-                        $lines[] = implode(' ' . $operator . ' ', $conditionLineParts);
+                        if (count($conditionLineParts)) {
+                            $hasCondition = TRUE;
+                            $lines[] = implode(' ' . $operator . ' ',
+                                $conditionLineParts);
+                        }
                     }
-                    var_dump($lines);
+                    $lines[] = "TCEFORM {";
+                    $lines[] = "\t" . $table . ' {';
+                    if (isset($ruleSet['contentElements'])) {
+                        $lines[] = "\t\tCType.keepItems := addToList(" . implode(', ',
+                                $ruleSet['contentElements']) . ')';
+                    }
+                    if (isset($ruleSet['plugins'])) {
+                        $lines[] = "\t\tlist_type.keepItems := addToList(" . implode(', ',
+                                $ruleSet['plugins']) . ')';
+                    }
+                    $lines[] = "\t}";
+                    $lines[] = "}";
+                    $lines[] = "mod.wizards.newContentElement.wizardItems {";
+                    if (isset($ruleSet['contentElements'])) {
+                        $lines[] = "\tcommon.show := addToList(" . implode(', ',
+                                $ruleSet['contentElements']) . ')';
+                    }
+                    if (isset($ruleSet['plugins'])) {
+                        $lines[] = "\tplugins.show := addToList(" . implode(', ',
+                                $ruleSet['plugins']) . ')';
+                    }
+                    $lines[] = "}";
+                    if ($hasCondition) {
+                        $lines[] = '[global]';
+                    }
+                    $fileContent = implode(PHP_EOL, $lines);
+                    $filePath = PATH_site . 'typo3temp/tx_permissions/' . $key . '.ts';
+                    GeneralUtility::writeFile(
+                        $filePath,
+                        (string)$fileContent
+                    );
+                    $this->message('Wrote configuration to: ' . str_replace(PATH_site,
+                            '', $filePath));
+
                 }
             }
+        }
+    }
+
+    /**
+     * Get column names
+     *
+     * @param $table
+     *
+     * @return array
+     */
+    protected function getColumnNames($table)
+    {
+        $table = preg_replace('/[^a-z0-9_]/', '', $table);
+        if (isset($this->columnCache[$table])) {
+            return $this->columnCache[$table];
+        } else {
+            $result = $this->databaseConnection->exec_SELECTgetSingleRow(
+                '*',
+                $table,
+                '1 = 1'
+            );
+            if ($result) {
+                $columnNames = array_keys($result);
+                $this->columnCache[$table] = $columnNames;
+            } else {
+                $columnNames = array();
+                $result = $this->databaseConnection->sql_query('SELECT DATABASE();');
+                $row = $this->databaseConnection->sql_fetch_row($result);
+                $databaseName = $row[0];
+                $this->databaseConnection->sql_free_result($result);
+                $result = $this->databaseConnection->sql_query(
+                    "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" .
+                    $databaseName .
+                    "' AND TABLE_NAME = '" .
+                    $table .
+                    "';"
+                );
+                while (($row = $this->databaseConnection->sql_fetch_row($result))) {
+                    $columnNames[] = $row[0];
+                };
+                $this->databaseConnection->sql_free_result($result);
+                $this->columnCache[$table] = $columnNames;
+            }
+            return $columnNames;
         }
     }
 
@@ -143,5 +253,26 @@ class PermissionsCommandController extends AbstractCommandController
         }
 
         return $configuration;
+    }
+
+    /**
+     * Get TCEFORM configuration from configuration string
+     *
+     * @param $configuration
+     *
+     * @return array
+     */
+    protected function getFormConfiguration($configuration)
+    {
+        $ruleSets = array();
+        if ($configuration !== null && count($configuration) === 1) {
+            if (isset($configuration['TYPO3']['TSConfig']['TCEFORM'])
+                && is_array($configuration['TYPO3']['TSConfig']['TCEFORM'])
+            ) {
+                $ruleSets = $configuration['TYPO3']['TSConfig']['TCEFORM'];
+            }
+        }
+
+        return $ruleSets;
     }
 }
