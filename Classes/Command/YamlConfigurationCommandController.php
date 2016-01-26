@@ -1,5 +1,5 @@
 <?php
-namespace MaxServ\Permissions\Command;
+namespace MaxServ\YamlConfiguration\Command;
 
 /**
  *  Copyright notice
@@ -31,24 +31,24 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Generate TSConfig configuration files from a YAML configuration
  *
- * @package MaxServ\Permissions
+ * @package MaxServ\YamlConfiguration
  * @subpackage Controller
  */
-class PermissionsCommandController extends AbstractCommandController
+class YamlConfigurationCommandController extends AbstractCommandController
 {
     /**
-     * Relative path to the Permission Configuration directory
+     * Relative path to the Yaml Configuration directory
      *
      * @var string
      */
-    const PERMISSIONS_CONFIGURATION_DIRECTORY = 'Configuration/Permissions/';
+    const CONFIGURATION_DIRECTORY = 'Configuration/';
 
     /**
      * Condition Class prefix
      *
      * @var string
      */
-    const CONDITION_PREFIX = 'MaxServ\Permissions\User\Condition::';
+    const CONDITION_PREFIX = 'MaxServ\YamlConfiguration\User\Condition::';
 
     /**
      * @var \TYPO3\CMS\Core\Database\DatabaseConnection
@@ -63,7 +63,7 @@ class PermissionsCommandController extends AbstractCommandController
     protected $columnCache = array();
 
     /**
-     * PermissionsCommandController constructor.
+     * YamlConfigurationCommandController constructor.
      */
     public function __construct()
     {
@@ -79,7 +79,7 @@ class PermissionsCommandController extends AbstractCommandController
     public function generateCommand()
     {
         $this->headerMessage('Generating permssions');
-        foreach ($this->findPermissionFiles() as $configurationFile) {
+        foreach ($this->findYamlFiles() as $configurationFile) {
             $configuration = $this->parseConfigurationFile($configurationFile);
 
             $this->infoMessage('Parsing: ' . str_replace(PATH_site, '',
@@ -138,7 +138,7 @@ class PermissionsCommandController extends AbstractCommandController
                         $lines[] = '[global]';
                     }
                     $fileContent = implode(PHP_EOL, $lines);
-                    $filePath = PATH_site . 'typo3temp/tx_permissions/' . $key . '.ts';
+                    $filePath = PATH_site . 'typo3temp/tx_yamlconfiguration/' . $key . '.ts';
                     GeneralUtility::writeFile(
                         $filePath,
                         (string)$fileContent
@@ -196,11 +196,11 @@ class PermissionsCommandController extends AbstractCommandController
     }
 
     /**
-     * Find permission files in all active extensions
+     * Find YAML configuration files in all active extensions
      *
      * @return array
      */
-    protected function findPermissionFiles()
+    protected function findYamlFiles()
     {
         /** @var \TYPO3\CMS\Core\Package\PackageManager $packageManager */
         $packageManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Package\\PackageManager');
@@ -208,20 +208,20 @@ class PermissionsCommandController extends AbstractCommandController
 
         $configurationFiles = array();
         foreach ($activePackages as $package) {
-//            if ($package->getPackageKey() === 'permissions') {
+//            if ($package->getPackageKey() === 'yaml-configuration') {
 //                continue;
 //            }
             if (!($package instanceof PackageInterface)) {
                 continue;
             }
             $packagePath = $package->getPackagePath();
-            if (!is_dir($packagePath . self::PERMISSIONS_CONFIGURATION_DIRECTORY)) {
+            if (!is_dir($packagePath . self::CONFIGURATION_DIRECTORY)) {
                 continue;
             }
             $configurationFiles = array_merge(
                 $configurationFiles,
                 GeneralUtility::getFilesInDir(
-                    $packagePath . self::PERMISSIONS_CONFIGURATION_DIRECTORY,
+                    $packagePath . self::CONFIGURATION_DIRECTORY,
                     'yaml,yml',
                     true
                 )

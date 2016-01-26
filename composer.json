@@ -1,18 +1,20 @@
 {
-  "name": "maxserv/permissions",
-	"type": "typo3-cms-extension",
-  "description": "MaxServ permission extension",
-	"license": ["GPL-2.0+"],
-	"require": {
-		"typo3/cms": "*",
-		"symfony/yaml": "~2.7"
-	},
-	"replace": {
-		"permissions": "*"
-	},
-	"autoload": {
-		"psr-4": {
-			"MaxServ\\Permissions\\": "Classes/"
-		}
-	}
+  "name": "maxserv/yaml-configuration",
+  "type": "typo3-cms-extension",
+  "description": "Generate TSConfig, user- and group- configuration using YAML files",
+  "license": [
+    "GPL-2.0+"
+  ],
+  "require": {
+    "typo3/cms": "6.2 - 7.6",
+    "symfony/yaml": "~2.7"
+  },
+  "replace": {
+    "yaml-configuration": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "MaxServ\\YamlConfiguration\\": "Classes/"
+    }
+  }
 }

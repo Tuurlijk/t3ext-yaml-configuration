@@ -1,5 +1,5 @@
 <?php
-namespace MaxServ\Permissions\Command;
+namespace MaxServ\YamlConfiguration\Command;
 
 /**
  *  Copyright notice

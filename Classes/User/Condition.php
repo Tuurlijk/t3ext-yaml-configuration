@@ -1,5 +1,5 @@
 <?php
-namespace MaxServ\Permissions\User;
+namespace MaxServ\YamlConfiguration\User;
 
 /**
  *  Copyright notice
@@ -92,7 +92,7 @@ class Condition
 
     /**
      * User function used to check if a content element has a certain
-     * backend_layout This is used in the Permissions.ts TSConfig file to make
+     * backend_layout This is used in the YamlConfiguration.ts TSConfig file to make
      * sure only certain content elements are placed in certain columns.
      *
      * This method detects several 'entry points' to new element creation:
@@ -160,7 +160,7 @@ class Condition
 
     /**
      * User function used to check if a content element is in a certain column
-     * This is used in the Permissions.ts TSConfig file to make sure only
+     * This is used in the YamlConfiguration.ts TSConfig file to make sure only
      * certain content elements are placed in certain columns.
      *
      * @see tx_wwwtuenl_hasBackendLayout for documentation
@@ -218,7 +218,7 @@ class Condition
 
     /**
      * User function used to check if a content element is a certain content element
-     * This is used in the Permissions.ts TSConfig file change configuration for
+     * This is used in the YamlConfiguration.ts TSConfig file change configuration for
      * certain content elements
      *
      * @param string $cType Identifier of the CType
@@ -256,7 +256,7 @@ class Condition
 
     /**
      * User function used to check if a content element is a certain plugin
-     * This is used in the Permissions.ts TSConfig file change configuration for
+     * This is used in the YamlConfiguration.ts TSConfig file change configuration for
      * certain content elements
      *
      * @param string $listType Identifier of the list_type
@@ -322,7 +322,7 @@ class Condition
 
     /**
      * User function used to check if a content element has a certain
-     * doktype This is used in the Permissions.ts TSConfig file to make
+     * doktype This is used in the YamlConfiguration.ts TSConfig file to make
      * sure only certain content elements are placed in certain columns.
      *
      * @see tx_wwwtuenl_hasBackendLayout for documentation
