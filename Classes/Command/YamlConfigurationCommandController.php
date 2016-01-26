@@ -60,7 +60,7 @@ class YamlConfigurationCommandController extends AbstractCommandController
      *
      * @var array
      */
-    protected $columnCache = array();
+    protected $tableColumnCache = array();
 
     /**
      * YamlConfigurationCommandController constructor.
@@ -161,8 +161,8 @@ class YamlConfigurationCommandController extends AbstractCommandController
     protected function getColumnNames($table)
     {
         $table = preg_replace('/[^a-z0-9_]/', '', $table);
-        if (isset($this->columnCache[$table])) {
-            return $this->columnCache[$table];
+        if (isset($this->tableColumnCache[$table])) {
+            return $this->tableColumnCache[$table];
         } else {
             $result = $this->databaseConnection->exec_SELECTgetSingleRow(
                 '*',
@@ -171,7 +171,7 @@ class YamlConfigurationCommandController extends AbstractCommandController
             );
             if ($result) {
                 $columnNames = array_keys($result);
-                $this->columnCache[$table] = $columnNames;
+                $this->tableColumnCache[$table] = $columnNames;
             } else {
                 $columnNames = array();
                 $result = $this->databaseConnection->sql_query('SELECT DATABASE();');
@@ -189,7 +189,7 @@ class YamlConfigurationCommandController extends AbstractCommandController
                     $columnNames[] = $row[0];
                 };
                 $this->databaseConnection->sql_free_result($result);
-                $this->columnCache[$table] = $columnNames;
+                $this->tableColumnCache[$table] = $columnNames;
             }
             return $columnNames;
         }
