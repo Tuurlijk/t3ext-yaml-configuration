@@ -1,0 +1,196 @@
+---
+TYPO3:
+  Access:
+    be_groups:
+      -
+        cruser_id: "2"
+        db_mountpoints: "14"
+        description: "The simple editors group demonstrates a handy and realistic set of permissions and options for every day  backend users who simply manages content and pages. More detailed and advanced features are hidden for embers of this user group to give a more simple interface\n"
+        explicit_allowdeny:
+          - "tt_content:CType:header:ALLOW"
+          - "tt_content:CType:bullets:ALLOW"
+          - "tt_content:CType:table:ALLOW"
+          - "tt_content:CType:menu:ALLOW"
+          - "tt_content:CType:list:ALLOW"
+          - "tt_content:CType:div:ALLOW"
+          - "tt_content:list_type:tudtoolbox_youtubecard:ALLOW"
+          - "tt_content:list_type:tudtoolbox_quote:ALLOW"
+        file_mountpoints:
+          - "2"
+          - "1"
+        file_permissions:
+          - readFolder
+          - writeFolder
+          - addFolder
+          - renameFolder
+          - moveFolder
+          - deleteFolder
+          - readFile
+          - writeFile
+          - addFile
+          - renameFile
+          - replaceFile
+          - moveFile
+          - deleteFile
+        groupMods:
+          - web_layout
+          - user_setup
+        pagetypes_select:
+          - "1"
+          - "4"
+        subgroup: "2"
+        tables_modify:
+          - pages
+          - sys_file
+          - sys_file_collection
+          - sys_file_metadata
+          - sys_file_reference
+          - tt_content
+        title: "Simple editors"
+        uid: "1"
+      -
+        cruser_id: "2"
+        description: "Basic configuration shared for all users. All other user groups can include this group as sub group to share a default set of permissions and options"
+        file_permissions:
+          - readFolder
+          - writeFolder
+          - addFolder
+          - renameFolder
+          - moveFolder
+          - copyFolder
+          - deleteFolder
+          - recursivedeleteFolder
+          - readFile
+          - writeFile
+          - addFile
+          - renameFile
+          - moveFile
+          - copyFile
+          - unzipFile
+          - deleteFile
+        groupMods:
+          - file
+          - file_list
+          - user
+          - user_setup
+        non_exclude_fields:
+          - "sys_file_metadata:categories"
+          - "sys_file_metadata:title"
+          - "sys_file_reference:alternative"
+          - "sys_file_reference:description"
+          - "sys_file_reference:link"
+          - "sys_file_reference:title"
+          - "sys_file_collection:hidden"
+          - "sys_file_collection:sys_language_uid"
+          - "sys_file_collection:starttime"
+          - "sys_file_collection:endtime"
+          - "sys_file_collection:l10n_parent"
+          - "pages:abstract"
+          - "pages:author"
+          - "pages:description"
+          - "pages:author_email"
+          - "pages:nav_hide"
+          - "pages:hidden"
+          - "pages:keywords"
+          - "pages:layout"
+          - "pages:nav_title"
+          - "pages:shortcut_mode"
+          - "pages:starttime"
+          - "pages:endtime"
+          - "tt_content:imageborder"
+          - "tt_content:image_zoom"
+          - "tt_content:colPos"
+          - "tt_content:date"
+          - "tt_content:image_effects"
+          - "tt_content:image_frames"
+          - "tt_content:imageheight"
+          - "tt_content:hidden"
+          - "tt_content:image_compression"
+          - "tt_content:sys_language_uid"
+          - "tt_content:starttime"
+          - "tt_content:endtime"
+          - "tt_content:subheader"
+          - "tt_content:l18n_parent"
+          - "tt_content:header_layout"
+          - "tt_content:imagewidth"
+          - "tt_content:pi_flexform;login;sDEF;pages"
+        tables_select:
+          - pages
+          - sys_file
+          - sys_file_collection
+          - sys_file_metadata
+          - sys_file_reference
+          - sys_file_storage
+          - backend_layout
+          - tt_content
+        title: "All users"
+        uid: "2"
+      -
+        cruser_id: "2"
+        db_mountpoints: "1"
+        description:
+          - "The advanced editors user group"
+          - " is an example implementation of a user group with a wide range of permissions and available options for making and editing an advanced set of features for pages and page content. The meta group \"All users\""
+          - " which includes a basic configuration that can be applied to all user groups"
+          - " is included as Sub Group below"
+        explicit_allowdeny:
+          - "tt_content:CType:--div--:ALLOW"
+          - "tt_content:CType:header:ALLOW"
+          - "tt_content:CType:text:ALLOW"
+          - "tt_content:CType:textpic:ALLOW"
+          - "tt_content:CType:image:ALLOW"
+          - "tt_content:CType:bullets:ALLOW"
+          - "tt_content:CType:table:ALLOW"
+          - "tt_content:CType:uploads:ALLOW"
+          - "tt_content:CType:mailform:ALLOW"
+          - "tt_content:CType:login:ALLOW"
+          - "tt_content:CType:search:ALLOW"
+          - "tt_content:CType:multimedia:ALLOW"
+          - "tt_content:CType:media:ALLOW"
+          - "tt_content:CType:menu:ALLOW"
+          - "tt_content:CType:shortcut:ALLOW"
+          - "tt_content:CType:list:ALLOW"
+          - "tt_content:CType:div:ALLOW"
+          - "tt_content:CType:html:ALLOW"
+        file_mountpoints:
+          - "2"
+          - "1"
+        file_permissions:
+          - readFolder
+          - writeFolder
+          - addFolder
+          - renameFolder
+          - moveFolder
+          - deleteFolder
+          - readFile
+          - writeFile
+          - addFile
+          - renameFile
+          - replaceFile
+          - moveFile
+          - files_copy
+          - deleteFile
+        groupMods:
+          - web
+          - web_layout
+          - web_list
+          - web_func
+          - web_info
+          - user
+          - user_setup
+        pagetypes_select:
+          - "1"
+          - "4"
+          - "3"
+        subgroup: "2"
+        tables_modify:
+          - pages
+          - sys_file
+          - sys_file_collection
+          - sys_file_metadata
+          - sys_file_reference
+          - pages_language_overlay
+          - tt_content
+          - sys_note
+        title: "Advanced editors"
+        uid: "3"

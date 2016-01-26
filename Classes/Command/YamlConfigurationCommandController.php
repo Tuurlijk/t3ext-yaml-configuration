@@ -71,24 +71,131 @@ class YamlConfigurationCommandController extends AbstractCommandController
     }
 
     /**
+     * Dump be_groups table to yml file
+     *
+     * @param array $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+     * @param bool $includeDeleted Dump deleted records. Default: false
+     * @param bool $includeHidden Dump hidden/disable records. Default: false
+     */
+    public function dumpBackendGroupsCommand(
+        $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
+        $includeDeleted = false,
+        $includeHidden = false
+    ) {
+        $this->headerMessage('Dumping group configuration');
+        $yaml = $this->dumpTable('be_groups', $skipColumns, $includeDeleted, $includeHidden);
+        if ($yaml !== '') {
+            $filePath = PATH_site . 'typo3temp/tx_yamlconfiguration/permissions_be_groups.yml';
+            GeneralUtility::writeFile(
+                $filePath,
+                (string)$yaml
+            );
+            $this->message('Wrote configuration to: ' . $this->warningString(str_replace(PATH_site, '', $filePath)));
+            $this->message('You may want to tidy the output using a tool like: ' . $this->successString('http://www.yamllint.com/'));
+        } else {
+            $this->warningMessage('No records found.');
+        }
+    }
+
+    /**
+     * Dump be_users table to yml file
+     *
+     * @param array $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+     * @param bool $includeDeleted Dump deleted records. Default: false
+     * @param bool $includeHidden Dump hidden/disable records. Default: false
+     */
+    public function dumpBackendUsersCommand(
+        $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
+        $includeDeleted = false,
+        $includeHidden = false
+    ) {
+        $this->headerMessage('Dumping group configuration');
+        $yaml = $this->dumpTable('be_users', $skipColumns, $includeDeleted, $includeHidden);
+        if ($yaml !== '') {
+            $filePath = PATH_site . 'typo3temp/tx_yamlconfiguration/permissions_be_users.yml';
+            GeneralUtility::writeFile(
+                $filePath,
+                (string)$yaml
+            );
+            $this->message('Wrote configuration to: ' . $this->warningString(str_replace(PATH_site, '', $filePath)));
+            $this->message('You may want to tidy the output using a tool like: ' . $this->successString('http://www.yamllint.com/'));
+        } else {
+            $this->warningMessage('No records found.');
+        }
+    }
+
+    /**
+     * Dump fe_groups table to yml file
+     *
+     * @param array $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+     * @param bool $includeDeleted Dump deleted records. Default: false
+     * @param bool $includeHidden Dump hidden/disable records. Default: false
+     */
+    public function dumpFrontendGroupsCommand(
+        $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
+        $includeDeleted = false,
+        $includeHidden = false
+    ) {
+        $this->headerMessage('Dumping group configuration');
+        $yaml = $this->dumpTable('fe_groups', $skipColumns, $includeDeleted, $includeHidden);
+        if ($yaml !== '') {
+            $filePath = PATH_site . 'typo3temp/tx_yamlconfiguration/permissions_fe_groups.yml';
+            GeneralUtility::writeFile(
+                $filePath,
+                (string)$yaml
+            );
+            $this->message('Wrote configuration to: ' . $this->warningString(str_replace(PATH_site, '', $filePath)));
+            $this->message('You may want to tidy the output using a tool like: ' . $this->successString('http://www.yamllint.com/'));
+        } else {
+            $this->warningMessage('No records found.');
+        }
+    }
+
+    /**
+     * Dump fe_users table to yml file
+     *
+     * @param array $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+     * @param bool $includeDeleted Dump deleted records. Default: false
+     * @param bool $includeHidden Dump hidden/disable records. Default: false
+     */
+    public function dumpFrontendUsersCommand(
+        $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
+        $includeDeleted = false,
+        $includeHidden = false
+    ) {
+        $this->headerMessage('Dumping group configuration');
+        $yaml = $this->dumpTable('fe_users', $skipColumns, $includeDeleted, $includeHidden);
+        if ($yaml !== '') {
+            $filePath = PATH_site . 'typo3temp/tx_yamlconfiguration/permissions_fe_users.yml';
+            GeneralUtility::writeFile(
+                $filePath,
+                (string)$yaml
+            );
+            $this->message('Wrote configuration to: ' . $this->warningString(str_replace(PATH_site, '', $filePath)));
+            $this->message('You may want to tidy the output using a tool like: ' . $this->successString('http://www.yamllint.com/'));
+        } else {
+            $this->warningMessage('No records found.');
+        }
+    }
+
+    /**
      * Generate TSConfig configuration files from a YAML configuration
      * \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig
      *
      * @return void
      */
-    public function generateCommand()
+    public function generateTsConfigCommand()
     {
         $this->headerMessage('Generating permssions');
         foreach ($this->findYamlFiles() as $configurationFile) {
             $configuration = $this->parseConfigurationFile($configurationFile);
 
-            $this->infoMessage('Parsing: ' . str_replace(PATH_site, '',
-                    $configurationFile));
+            $this->infoMessage('Parsing: ' . str_replace(PATH_site, '', $configurationFile));
             $forms = $this->getFormConfiguration($configuration);
             foreach ($forms as $table => $ruleSets) {
                 foreach ($ruleSets as $key => $ruleSet) {
                     $lines = array();
-                    $hasCondition = FALSE;
+                    $hasCondition = false;
                     if (isset($ruleSet['title'])) {
                         $lines[] = '';
                         $lines[] = "// " . $ruleSet['title'];
@@ -107,9 +214,8 @@ class YamlConfigurationCommandController extends AbstractCommandController
                             $conditionLineParts[] = '[userFunc = ' . self::CONDITION_PREFIX . $userFunction . ']';
                         }
                         if (count($conditionLineParts)) {
-                            $hasCondition = TRUE;
-                            $lines[] = implode(' ' . $operator . ' ',
-                                $conditionLineParts);
+                            $hasCondition = true;
+                            $lines[] = implode(' ' . $operator . ' ', $conditionLineParts);
                         }
                     }
                     $lines[] = "TCEFORM {";
@@ -145,10 +251,75 @@ class YamlConfigurationCommandController extends AbstractCommandController
                     );
                     $this->message('Wrote configuration to: ' . str_replace(PATH_site,
                             '', $filePath));
-
                 }
             }
         }
+    }
+
+    /**
+     * Dump table table to yml file
+     *
+     * @param string $table
+     * @param array $skipColumns
+     * @param bool $includeDeleted Dump deleted records. Default: false
+     * @param bool $includeHidden Dump hidden/disable records. Default: false
+     *
+     * @return string
+     */
+    public function dumpTable(
+        $table,
+        $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
+        $includeDeleted = false,
+        $includeHidden = false
+    ) {
+        $yaml = '';
+        $table = preg_replace('/[^a-z0-9_]/', '', $table);
+        $columnNames = $this->getColumnNames($table);
+        $where = '1 = 1';
+        if (!$includeHidden || !$includeDeleted) {
+            $where = array();
+            if (!$includeHidden) {
+                if (in_array('disable', $columnNames)) {
+                    $where[] = 'disable = 0';
+                }
+                if (in_array('hidden', $columnNames)) {
+                    $where[] = 'hidden = 0';
+                }
+            }
+            if (!$includeDeleted) {
+                $where[] = 'deleted = 0';
+            }
+            $where = implode(' AND ', $where);
+        }
+        $result = $this->databaseConnection->exec_SELECTgetRows('*', $table, $where);
+        if ($result) {
+            $explodedResult = array();
+            foreach ($result as $row) {
+                $explodedRow = array();
+                foreach ($row as $column => $value) {
+                    if (in_array($column, $skipColumns)) {
+                        continue;
+                    }
+                    $explodedValue = explode(',', $value);
+                    if (count($explodedValue) > 1) {
+                        $explodedRow[$column] = $explodedValue;
+                    } elseif ($value) {
+                        $explodedRow[$column] = $value;
+                    }
+                }
+                $explodedResult[] = $explodedRow;
+            }
+            $dump = array(
+                'TYPO3' => array(
+                    'Access' => array(
+                        $table => $explodedResult
+                    )
+                )
+            );
+            $yaml = Yaml::dump($dump);
+        }
+
+        return $yaml;
     }
 
     /**
@@ -191,6 +362,7 @@ class YamlConfigurationCommandController extends AbstractCommandController
                 $this->databaseConnection->sql_free_result($result);
                 $this->tableColumnCache[$table] = $columnNames;
             }
+
             return $columnNames;
         }
     }
