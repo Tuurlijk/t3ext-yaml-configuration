@@ -27,7 +27,6 @@ use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\Core\Package\PackageInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-
 /**
  * Generate TSConfig configuration files from a YAML configuration
  *
@@ -380,9 +379,9 @@ class YamlConfigurationCommandController extends AbstractCommandController
 
         $configurationFiles = array();
         foreach ($activePackages as $package) {
-//            if ($package->getPackageKey() === 'yaml-configuration') {
-//                continue;
-//            }
+            if ($package->getPackageKey() === 'yaml-configuration') {
+                continue;
+            }
             if (!($package instanceof PackageInterface)) {
                 continue;
             }
