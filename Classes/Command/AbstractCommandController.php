@@ -23,7 +23,10 @@ namespace MaxServ\YamlConfiguration\Command;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Package\PackageInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\CommandController;
 
 // I can haz color / use unicode?
@@ -52,35 +55,178 @@ class AbstractCommandController extends CommandController
 {
 
     /**
+     * Relative path to the Yaml Configuration directory
+     *
+     * @var string
+     */
+    const CONFIGURATION_DIRECTORY = 'Configuration/';
+
+    /**
+     * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+     */
+    protected $databaseConnection;
+
+    /**
+     * Cache of table column names
+     *
      * @var array
      */
-    protected $configuration;
+    protected $tableColumnCache = array();
 
     /**
-     * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
-     * @inject
+     * ExportCommandController constructor.
      */
-    protected $configurationManager;
-
-    /**
-     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
-     * @return void
-     */
-    public function injectConfigurationManager(
-        \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
-    ) {
-        $this->configurationManager = $configurationManager;
-        $this->configuration = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
+    public function __construct()
+    {
+        $this->databaseConnection = $GLOBALS['TYPO3_DB'];
     }
 
     /**
-     * Get module configuration
+     * Get column names
+     *
+     * @param $table
      *
      * @return array
      */
-    public function getConfiguration()
+    protected function getColumnNames($table)
     {
-        return $this->configuration;
+        $table = preg_replace('/[^a-z0-9_]/', '', $table);
+        if (isset($this->tableColumnCache[$table])) {
+            return $this->tableColumnCache[$table];
+        } else {
+            $result = $this->databaseConnection->exec_SELECTgetSingleRow(
+                '*',
+                $table,
+                '1 = 1'
+            );
+            if ($result) {
+                $columnNames = array_keys($result);
+                $this->tableColumnCache[$table] = $columnNames;
+            } else {
+                $columnNames = array();
+                $result = $this->databaseConnection->sql_query('SELECT DATABASE();');
+                $row = $this->databaseConnection->sql_fetch_row($result);
+                $databaseName = $row[0];
+                $this->databaseConnection->sql_free_result($result);
+                $result = $this->databaseConnection->sql_query(
+                    "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" .
+                    $databaseName .
+                    "' AND TABLE_NAME = '" .
+                    $table .
+                    "';"
+                );
+                while (($row = $this->databaseConnection->sql_fetch_row($result))) {
+                    $columnNames[] = $row[0];
+                };
+                $this->databaseConnection->sql_free_result($result);
+                $this->tableColumnCache[$table] = $columnNames;
+            }
+
+            return $columnNames;
+        }
+    }
+
+    /**
+     * Find YAML configuration files in all active extensions
+     *
+     * @return array
+     */
+    protected function findYamlFiles()
+    {
+        /** @var \TYPO3\CMS\Core\Package\PackageManager $packageManager */
+        $packageManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Package\\PackageManager');
+        $activePackages = $packageManager->getActivePackages();
+
+        $configurationFiles = array();
+        foreach ($activePackages as $package) {
+            if ($package->getPackageKey() === 'yaml-configuration') {
+                continue;
+            }
+            if (!($package instanceof PackageInterface)) {
+                continue;
+            }
+            $packagePath = $package->getPackagePath();
+            if (!is_dir($packagePath . self::CONFIGURATION_DIRECTORY)) {
+                continue;
+            }
+            $configurationFiles = array_merge(
+                $configurationFiles,
+                GeneralUtility::getFilesInDir(
+                    $packagePath . self::CONFIGURATION_DIRECTORY,
+                    'yaml,yml',
+                    true
+                )
+            );
+        }
+
+        return $configurationFiles;
+    }
+
+    /**
+     * Flatten yaml fields into string values.
+     *
+     * @param $row
+     * @param string $glue
+     *
+     * @return array
+     */
+    protected function flattenYamlFields($row, $glue = ',')
+    {
+        $flat = array();
+        foreach ($row as $key => $value) {
+            if (is_array($value)) {
+                $flat[$key] = implode($glue, $value);
+            } else {
+                $flat[$key] = $value;
+            }
+        }
+        return $flat;
+    }
+
+    /**
+     * Check if the configuration file exists and if the Yaml parser is
+     * available
+     *
+     * @param $configurationFile
+     *
+     * @return array|null
+     */
+    protected function parseConfigurationFile($configurationFile)
+    {
+        $configuration = null;
+        if (!empty($configurationFile)
+            && is_file($configurationFile)
+            && is_callable(array(
+                'Symfony\\Component\\Yaml\\Yaml',
+                'parse'
+            ))
+        ) {
+            $configuration = Yaml::parse(file_get_contents($configurationFile));
+        }
+
+        return $configuration;
+    }
+
+    /**
+     * Get Data configuration from configuration string
+     *
+     * @param $configuration
+     * @param $table
+     *
+     * @return array
+     */
+    protected function getDataConfiguration($configuration, $table)
+    {
+        $records = array();
+        if ($configuration !== null && count($configuration) === 1) {
+            if (isset($configuration['TYPO3']['Data'][$table])
+                && is_array($configuration['TYPO3']['Data'][$table])
+            ) {
+                $records = $configuration['TYPO3']['Data'][$table];
+            }
+        }
+
+        return $records;
     }
 
     /**
