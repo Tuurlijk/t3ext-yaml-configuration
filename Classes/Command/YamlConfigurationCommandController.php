@@ -70,33 +70,6 @@ class YamlConfigurationCommandController extends AbstractCommandController
     }
 
     /**
-     * Dump be_groups table to yml file
-     *
-     * @param array $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
-     * @param bool $includeDeleted Dump deleted records. Default: false
-     * @param bool $includeHidden Dump hidden/disable records. Default: false
-     */
-    public function dumpBackendGroupsCommand(
-        $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
-        $includeDeleted = false,
-        $includeHidden = false
-    ) {
-        $this->headerMessage('Dumping group configuration');
-        $yaml = $this->dumpTable('be_groups', $skipColumns, $includeDeleted, $includeHidden);
-        if ($yaml !== '') {
-            $filePath = PATH_site . 'typo3temp/tx_yamlconfiguration/permissions_be_groups.yml';
-            GeneralUtility::writeFile(
-                $filePath,
-                (string)$yaml
-            );
-            $this->message('Wrote configuration to: ' . $this->warningString(str_replace(PATH_site, '', $filePath)));
-            $this->message('You may want to tidy the output using a tool like: ' . $this->successString('http://www.yamllint.com/'));
-        } else {
-            $this->warningMessage('No records found.');
-        }
-    }
-
-    /**
      * Dump be_users table to yml file
      *
      * @param array $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
@@ -108,46 +81,22 @@ class YamlConfigurationCommandController extends AbstractCommandController
         $includeDeleted = false,
         $includeHidden = false
     ) {
-        $this->headerMessage('Dumping group configuration');
-        $yaml = $this->dumpTable('be_users', $skipColumns, $includeDeleted, $includeHidden);
-        if ($yaml !== '') {
-            $filePath = PATH_site . 'typo3temp/tx_yamlconfiguration/permissions_be_users.yml';
-            GeneralUtility::writeFile(
-                $filePath,
-                (string)$yaml
-            );
-            $this->message('Wrote configuration to: ' . $this->warningString(str_replace(PATH_site, '', $filePath)));
-            $this->message('You may want to tidy the output using a tool like: ' . $this->successString('http://www.yamllint.com/'));
-        } else {
-            $this->warningMessage('No records found.');
-        }
+        $this->dumpTable('be_users', $skipColumns, $includeDeleted, $includeHidden);
     }
 
     /**
-     * Dump fe_groups table to yml file
+     * Dump be_groups table to yml file
      *
      * @param array $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
      * @param bool $includeDeleted Dump deleted records. Default: false
      * @param bool $includeHidden Dump hidden/disable records. Default: false
      */
-    public function dumpFrontendGroupsCommand(
+    public function dumpBackendGroupsCommand(
         $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
         $includeDeleted = false,
         $includeHidden = false
     ) {
-        $this->headerMessage('Dumping group configuration');
-        $yaml = $this->dumpTable('fe_groups', $skipColumns, $includeDeleted, $includeHidden);
-        if ($yaml !== '') {
-            $filePath = PATH_site . 'typo3temp/tx_yamlconfiguration/permissions_fe_groups.yml';
-            GeneralUtility::writeFile(
-                $filePath,
-                (string)$yaml
-            );
-            $this->message('Wrote configuration to: ' . $this->warningString(str_replace(PATH_site, '', $filePath)));
-            $this->message('You may want to tidy the output using a tool like: ' . $this->successString('http://www.yamllint.com/'));
-        } else {
-            $this->warningMessage('No records found.');
-        }
+        $this->dumpTable('be_groups', $skipColumns, $includeDeleted, $includeHidden);
     }
 
     /**
@@ -162,19 +111,66 @@ class YamlConfigurationCommandController extends AbstractCommandController
         $includeDeleted = false,
         $includeHidden = false
     ) {
-        $this->headerMessage('Dumping group configuration');
-        $yaml = $this->dumpTable('fe_users', $skipColumns, $includeDeleted, $includeHidden);
-        if ($yaml !== '') {
-            $filePath = PATH_site . 'typo3temp/tx_yamlconfiguration/permissions_fe_users.yml';
-            GeneralUtility::writeFile(
-                $filePath,
-                (string)$yaml
-            );
-            $this->message('Wrote configuration to: ' . $this->warningString(str_replace(PATH_site, '', $filePath)));
-            $this->message('You may want to tidy the output using a tool like: ' . $this->successString('http://www.yamllint.com/'));
-        } else {
-            $this->warningMessage('No records found.');
-        }
+        $this->dumpTable('fe_users', $skipColumns, $includeDeleted, $includeHidden);
+    }
+
+    /**
+     * Dump fe_groups table to yml file
+     *
+     * @param array $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+     * @param bool $includeDeleted Dump deleted records. Default: false
+     * @param bool $includeHidden Dump hidden/disable records. Default: false
+     */
+    public function dumpFrontendGroupsCommand(
+        $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
+        $includeDeleted = false,
+        $includeHidden = false
+    ) {
+        $this->dumpTable('fe_groups', $skipColumns, $includeDeleted, $includeHidden);
+    }
+
+    /**
+     * Import backend user configuration from yml files
+     * Import backend user configuration from yml files into be_users table. Existing records will be updated.
+     *
+     * @param string $matchField Field used to match configurations to database records. Default: uid
+     */
+    public function importBackendUsersCommand($matchField = 'uid')
+    {
+        $this->importAccessConfiguration('be_users', $matchField);
+    }
+
+    /**
+     * Import backend group configuration from yml files
+     * Import backend group configuration from yml files into be_users table. Existing records will be updated.
+     *
+     * @param string $matchField Field used to match configurations to database records. Default: uid
+     */
+    public function importBackendGroupsCommand($matchField = 'uid')
+    {
+        $this->importAccessConfiguration('be_groups', $matchField);
+    }
+
+    /**
+     * Import frontend user configuration from yml files
+     * Import frontend user configuration from yml files into fe_users table. Existing records will be updated.
+     *
+     * @param string $matchField Field used to match configurations to database records. Default: uid
+     */
+    public function importFrontendUsersCommand($matchField = 'uid')
+    {
+        $this->importAccessConfiguration('fe_users', $matchField);
+    }
+
+    /**
+     * Import frontend group configuration from yml files
+     * Import frontend group configuration from yml files into fe_users table. Existing records will be updated.
+     *
+     * @param string $matchField Field used to match configurations to database records. Default: uid
+     */
+    public function importFrontendGroupsCommand($matchField = 'uid')
+    {
+        $this->importAccessConfiguration('fe_groups', $matchField);
     }
 
     /**
@@ -263,7 +259,7 @@ class YamlConfigurationCommandController extends AbstractCommandController
      * @param bool $includeDeleted Dump deleted records. Default: false
      * @param bool $includeHidden Dump hidden/disable records. Default: false
      *
-     * @return string
+     * @return void
      */
     public function dumpTable(
         $table,
@@ -271,8 +267,9 @@ class YamlConfigurationCommandController extends AbstractCommandController
         $includeDeleted = false,
         $includeHidden = false
     ) {
-        $yaml = '';
         $table = preg_replace('/[^a-z0-9_]/', '', $table);
+        $this->headerMessage('Dumping ' . $table . ' configuration');
+        $yaml = '';
         $columnNames = $this->getColumnNames($table);
         $where = '1 = 1';
         if (!$includeHidden || !$includeDeleted) {
@@ -318,7 +315,17 @@ class YamlConfigurationCommandController extends AbstractCommandController
             $yaml = Yaml::dump($dump);
         }
 
-        return $yaml;
+        if ($yaml !== '') {
+            $filePath = PATH_site . 'typo3temp/tx_yamlconfiguration/permissions_' . $table . '.yml';
+            GeneralUtility::writeFile(
+                $filePath,
+                (string)$yaml
+            );
+            $this->message('Wrote configuration to: ' . $this->warningString(str_replace(PATH_site, '', $filePath)));
+            $this->message('You may want to tidy the output using a tool like: ' . $this->successString('http://www.yamllint.com/'));
+        } else {
+            $this->warningMessage('No records found in ' . $table . ' table.');
+        }
     }
 
     /**
@@ -403,6 +410,72 @@ class YamlConfigurationCommandController extends AbstractCommandController
     }
 
     /**
+     * Flatten yaml fields into string values.
+     *
+     * @param $row
+     * @param string $glue
+     *
+     * @return array
+     */
+    protected function flattenYamlFields($row, $glue = ',')
+    {
+        $flat = array();
+        foreach ($row as $key => $value) {
+            if (is_array($value)) {
+                $flat[$key] = implode($glue, $value);
+            } else {
+                $flat[$key] = $value;
+            }
+        }
+        return $flat;
+    }
+
+    /**
+     * Import Access configuration
+     *
+     * @param $table
+     * @param $matchField
+     */
+    protected function importAccessConfiguration($table, $matchField)
+    {
+        $table = preg_replace('/[^a-z0-9_]/', '', $table);
+        $matchField = preg_replace('/[^a-z0-9_]/', '', $matchField);
+        $this->headerMessage('Importing ' . $table . ' configuration');
+        foreach ($this->findYamlFiles() as $configurationFile) {
+            $configuration = $this->parseConfigurationFile($configurationFile);
+            $this->infoMessage('Parsing: ' . str_replace(PATH_site, '', $configurationFile));
+            $records = $this->getAccessConfiguration($configuration, $table);
+            foreach ($records as $record) {
+                $record = $this->flattenYamlFields($record);
+                $row = false;
+                if (isset($record[$matchField])) {
+                    $record[$matchField] = $this->databaseConnection->quoteStr($record[$matchField], $table);
+                    $row = $this->databaseConnection->exec_SELECTgetSingleRow(
+                        '*',
+                        $table,
+                        $matchField . ' = ' . $record[$matchField]
+                    );
+                }
+                if ($row) {
+                    $this->successMessage('Found existing ' . $table . ' with ' . $matchField . ' ' . $record[$matchField]);
+                    $this->message('Updating . . .');
+                    $this->databaseConnection->exec_UPDATEquery(
+                        $table,
+                        $matchField . ' = ' . $record[$matchField],
+                        $record
+                    );
+                } else {
+                    $this->message('Adding . . .');
+                    $this->databaseConnection->exec_INSERTquery(
+                        $table,
+                        $record
+                    );
+                }
+            }
+        }
+    }
+
+    /**
      * Check if the configuration file exists and if the Yaml parser is
      * available
      *
@@ -424,6 +497,28 @@ class YamlConfigurationCommandController extends AbstractCommandController
         }
 
         return $configuration;
+    }
+
+    /**
+     * Get Access configuration from configuration string
+     *
+     * @param $configuration
+     * @param $table
+     *
+     * @return array
+     */
+    protected function getAccessConfiguration($configuration, $table)
+    {
+        $records = array();
+        if ($configuration !== null && count($configuration) === 1) {
+            if (isset($configuration['TYPO3']['Access'][$table])
+                && is_array($configuration['TYPO3']['Access'][$table])
+            ) {
+                $records = $configuration['TYPO3']['Access'][$table];
+            }
+        }
+
+        return $records;
     }
 
     /**
