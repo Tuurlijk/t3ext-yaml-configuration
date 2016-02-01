@@ -1,7 +1,7 @@
 <?php
 $EM_CONF[$_EXTKEY] = array(
     'title' => 'Configure your TYPO3 site using YAML files',
-    'description' => 'Generate TSConfig, user- and group- configuration using YAML files.',
+    'description' => 'Export and import any table to and from a YAML file. Generate TSConfig from YAML files.',
     'category' => 'BE',
     'author' => 'Michiel Roos',
     'author_email' => 'michiel@maxserv.com',

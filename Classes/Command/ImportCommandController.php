@@ -87,10 +87,10 @@ class ImportCommandController extends AbstractCommandController
      * Import data from yml files into a table. Existing records will be updated.
      *
      * @param string $table The name of the table to export
-     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: uid
+     * @param string $matchFields Comma separated list of fields used to match configurations to database records.
      * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
-    public function tableCommand($table, $matchFields = 'uid', $file = null)
+    public function tableCommand($table, $matchFields, $file = null)
     {
         $this->importData($table, $matchFields, $file);
     }
@@ -99,10 +99,10 @@ class ImportCommandController extends AbstractCommandController
      * Import Data
      *
      * @param $table
-     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: uid
+     * @param string $matchFields Comma separated list of fields used to match configurations to database records.
      * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
-    protected function importData($table, $matchFields = 'uid', $file = null)
+    protected function importData($table, $matchFields, $file = null)
     {
         var_dump($matchFields);
         $table = preg_replace('/[^a-z0-9_]/', '', $table);

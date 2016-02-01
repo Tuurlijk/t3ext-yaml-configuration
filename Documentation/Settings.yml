@@ -1,0 +1,20 @@
+﻿# Settings.yml
+# -*- coding: utf-8 -*- with BOM. Umlaut-check: ÄÖÜäöüß
+---
+conf.py:
+  todo_include_todos: True
+  copyright: 2016
+  project: YANL-Configuration
+  version: 1.0
+  release: 1.0.0
+  latex_documents:
+  - - Index
+    - YANL-Configuration.tex
+    - YANL-Configuration
+    - Michiel Roos
+    - manual
+  latex_elements:
+    papersize: a4paper
+    pointsize: 10pt
+    preamble: \usepackage{typo3}
+...
