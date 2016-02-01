@@ -37,83 +37,94 @@ class ExportCommandController extends AbstractCommandController
     /**
      * Export be_users table to yml file
      *
+     * @param string $file Path to the yml file. It is advised to store this outside of the web root.
      * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
      * @param bool $includeDeleted Export deleted records. Default: false
      * @param bool $includeHidden Export hidden/disable records. Default: false
      */
     public function backendUsersCommand(
+        $file = null,
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false
     ) {
-        $this->exportTable('be_users', $skipColumns, $includeDeleted, $includeHidden);
+        $this->exportTable('be_users', $file, $skipColumns, $includeDeleted, $includeHidden);
     }
     /**
      * Export be_groups table to yml file
      *
+     * @param string $file Path to the yml file. It is advised to store this outside of the web root.
      * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
      * @param bool $includeDeleted Export deleted records. Default: false
      * @param bool $includeHidden Export hidden/disable records. Default: false
      */
     public function backendGroupsCommand(
+        $file = null,
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false
     ) {
-        $this->exportTable('be_groups', $skipColumns, $includeDeleted, $includeHidden);
+        $this->exportTable('be_groups', $file, $skipColumns, $includeDeleted, $includeHidden);
     }
 
     /**
      * Export fe_users table to yml file
      *
+     * @param string $file Path to the yml file. It is advised to store this outside of the web root.
      * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
      * @param bool $includeDeleted Export deleted records. Default: false
      * @param bool $includeHidden Export hidden/disable records. Default: false
      */
     public function frontendUsersCommand(
+        $file = null,
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false
     ) {
-        $this->exportTable('fe_users', $skipColumns, $includeDeleted, $includeHidden);
+        $this->exportTable('fe_users', $file, $skipColumns, $includeDeleted, $includeHidden);
     }
 
     /**
      * Export fe_groups table to yml file
      *
+     * @param string $file Path to the yml file. It is advised to store this outside of the web root.
      * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
      * @param bool $includeDeleted Export deleted records. Default: false
      * @param bool $includeHidden Export hidden/disable records. Default: false
      */
     public function frontendGroupsCommand(
+        $file = null,
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false
     ) {
-        $this->exportTable('fe_groups', $skipColumns, $includeDeleted, $includeHidden);
+        $this->exportTable('fe_groups', $file, $skipColumns, $includeDeleted, $includeHidden);
     }
 
     /**
      * Export a table to yml file
      *
      * @param string $table The name of the table to export
+     * @param string $file Path to the yml file. It is advised to store this outside of the web root.
      * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
      * @param bool $includeDeleted Dump deleted records. Default: false
      * @param bool $includeHidden Dump hidden/disable records. Default: false
      */
     public function tableCommand(
         $table,
+        $file = null,
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false
     ) {
-        $this->exportTable($table, $skipColumns, $includeDeleted, $includeHidden);
+        $this->exportTable($table, $file, $skipColumns, $includeDeleted, $includeHidden);
     }
 
     /**
      * Export table table to yml file
      *
      * @param string $table
+     * @param string $file Path to the yml file. It is advised to store this outside of the web root.
      * @param string $skipColumns
      * @param bool $includeDeleted Export deleted records. Default: false
      * @param bool $includeHidden Export hidden/disable records. Default: false
@@ -122,6 +133,7 @@ class ExportCommandController extends AbstractCommandController
      */
     public function exportTable(
         $table,
+        $file = null,
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false
@@ -129,6 +141,15 @@ class ExportCommandController extends AbstractCommandController
         $table = preg_replace('/[^a-z0-9_]/', '', $table);
         $skipColumns = explode(',', $skipColumns);
         $this->headerMessage('Exporting ' . $table . ' configuration');
+        if (!$file) {
+            $this->warningMessage('No --file parameter specified. Data will be written to typo3temp/. This is pretty unsecure.');
+        } else {
+            $filePath = GeneralUtility::getFileAbsFileName($file);
+            if (strpos($filePath, PATH_site) !== false) {
+                $this->errorMessage('Please specify an absolute path outside of the web root.');
+                exit;
+            }
+        }
         $yaml = '';
         $columnNames = $this->getColumnNames($table);
         $where = '1 = 1';
@@ -177,12 +198,13 @@ class ExportCommandController extends AbstractCommandController
 
         if ($yaml !== '') {
             $secret = sha1($yaml);
+            GeneralUtility::mkdir_deep(PATH_site . 'typo3temp/tx_yamlconfiguration/');
             $filePath = PATH_site . 'typo3temp/tx_yamlconfiguration/export_' . $table . '.' . $secret . '.yml';
             GeneralUtility::writeFile(
-                $filePath,
+                ($file) ?: $filePath,
                 (string)$yaml
             );
-            $this->message('Wrote to: ' . $this->warningString(str_replace(PATH_site, '', $filePath)));
+            $this->message('Wrote to: ' . $this->warningString(str_replace(PATH_site, '', ($file) ?: $filePath)));
             $this->message('You can tidy the yaml using a tool like: ' . $this->successString('http://www.yamllint.com/'));
         } else {
             $this->warningMessage('No records found in ' . $table . ' table.');

@@ -104,7 +104,6 @@ class ImportCommandController extends AbstractCommandController
      */
     protected function importData($table, $matchFields, $file = null)
     {
-        var_dump($matchFields);
         $table = preg_replace('/[^a-z0-9_]/', '', $table);
         $matchFields = explode(',', preg_replace('/[^a-z0-9_,]/', '', $matchFields));
         $columnNames = $this->getColumnNames($table);
