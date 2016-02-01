@@ -24,7 +24,6 @@ namespace MaxServ\YamlConfiguration\Command;
  */
 
 use Symfony\Component\Yaml\Yaml;
-use TYPO3\CMS\Core\Package\PackageInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -33,7 +32,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package MaxServ\YamlConfiguration
  * @subpackage Controller
  */
-class YamlConfigurationCommandController extends AbstractCommandController
+class TsConfigCommandController extends AbstractCommandController
 {
     /**
      * Condition Class prefix
