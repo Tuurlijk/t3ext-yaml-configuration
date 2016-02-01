@@ -45,11 +45,8 @@ yaml_configuration:export:backendgroups
 
 
 
-
-
 Options
 ^^^^^^^
-
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
@@ -58,7 +55,6 @@ Options
   Export deleted records. Default: false
 ``--include-hidden``
   Export hidden/disable records. Default: false
-
 
 
 
@@ -70,11 +66,8 @@ yaml_configuration:export:backendusers
 
 
 
-
-
 Options
 ^^^^^^^
-
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
@@ -83,7 +76,6 @@ Options
   Export deleted records. Default: false
 ``--include-hidden``
   Export hidden/disable records. Default: false
-
 
 
 
@@ -95,11 +87,8 @@ yaml_configuration:export:frontendgroups
 
 
 
-
-
 Options
 ^^^^^^^
-
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
@@ -108,7 +97,6 @@ Options
   Export deleted records. Default: false
 ``--include-hidden``
   Export hidden/disable records. Default: false
-
 
 
 
@@ -120,11 +108,8 @@ yaml_configuration:export:frontendusers
 
 
 
-
-
 Options
 ^^^^^^^
-
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
@@ -137,17 +122,13 @@ Options
 
 
 
-
 yaml_configuration:export:table
 *******************************
 
 **Export a table to yml file**
 
-
-
 Arguments
 ^^^^^^^^^
-
 ``--table``
   The name of the table to export
 
@@ -155,7 +136,6 @@ Arguments
 
 Options
 ^^^^^^^
-
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
@@ -168,24 +148,19 @@ Options
 
 
 
-
 yaml_configuration:import:backendgroups
 ***************************************
 
 **Import backend groups from yml file**
-
 Import backend groups from yml file into be_users table. Existing records will be updated.
-
 
 
 Options
 ^^^^^^^
-
 ``--match-fields``
   Comma separated list of fields used to match configurations to database records. Default: title
 ``--file``
   Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
-
 
 
 
@@ -194,19 +169,15 @@ yaml_configuration:import:backendusers
 **************************************
 
 **Import backend users from yml file**
-
 Import backend users from yml file into be_users table. Existing records will be updated.
-
 
 
 Options
 ^^^^^^^
-
 ``--match-fields``
   Comma separated list of fields used to match configurations to database records. Default: username
 ``--file``
   Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
-
 
 
 
@@ -215,14 +186,11 @@ yaml_configuration:import:frontendgroups
 ****************************************
 
 **Import frontend groups from yml file**
-
 Import frontend groups from yml file into fe_users table. Existing records will be updated.
-
 
 
 Options
 ^^^^^^^
-
 ``--match-fields``
   Comma separated list of fields used to match configurations to database records. Default: title
 ``--file``
@@ -231,19 +199,15 @@ Options
 
 
 
-
 yaml_configuration:import:frontendusers
 ***************************************
 
 **Import frontend users from yml file**
-
 Import frontend users from yml file into fe_users table. Existing records will be updated.
-
 
 
 Options
 ^^^^^^^
-
 ``--match-fields``
   Comma separated list of fields used to match configurations to database records. Default: username
 ``--file``
@@ -252,17 +216,13 @@ Options
 
 
 
-
 yaml_configuration:import:table
 *******************************
 
 **Import table data from yml file**
-
 Import table data from yml file. Existing records will be updated.
-
 Arguments
 ^^^^^^^^^
-
 ``--table``
   The name of the table to export
 ``--match-fields``
@@ -272,10 +232,8 @@ Arguments
 
 Options
 ^^^^^^^
-
 ``--file``
   Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
-
 
 
 
@@ -285,10 +243,12 @@ yaml_configuration:tsconfig:generate
 
 **Generate TSConfig configuration files from a YAML configuration**
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig
 
 
-
+Options
+^^^^^^^
+``--file``
+  Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
 
 
 

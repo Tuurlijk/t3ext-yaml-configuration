@@ -45,16 +45,23 @@ class TsConfigCommandController extends AbstractCommandController
 
     /**
      * Generate TSConfig configuration files from a YAML configuration
-     * \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig
      *
      * @since 1.0.0
      *
+     * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
+     *
      * @return void
      */
-    public function generateCommand()
+    public function generateCommand($file = null)
     {
         $this->headerMessage('Generating permssions');
-        foreach ($this->findYamlFiles() as $configurationFile) {
+        if ($file === null) {
+            $configurationFiles = $this->findYamlFiles();
+        } else {
+            $file = GeneralUtility::getFileAbsFileName($file);
+            $configurationFiles = array($file);
+        }
+        foreach ($configurationFiles as $configurationFile) {
             $configuration = $this->parseConfigurationFile($configurationFile);
 
             $this->infoMessage('Parsing: ' . str_replace(PATH_site, '', $configurationFile));
