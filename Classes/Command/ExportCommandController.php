@@ -42,9 +42,9 @@ class ExportCommandController extends AbstractCommandController
      * @since 1.0.0
      *
      * @param string $file Path to the yml file. It is advised to store this outside of the web root.
-     * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
-     * @param bool $includeDeleted Export deleted records. Default: false
-     * @param bool $includeHidden Export hidden/disable records. Default: false
+     * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
+     * @param bool $includeDeleted Export deleted records. Default: **false**
+     * @param bool $includeHidden Export hidden/disable records. Default: **false**
      */
     public function backendUsersCommand(
         $file = null,
@@ -60,9 +60,9 @@ class ExportCommandController extends AbstractCommandController
      * @since 1.0.0
      *
      * @param string $file Path to the yml file. It is advised to store this outside of the web root.
-     * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
-     * @param bool $includeDeleted Export deleted records. Default: false
-     * @param bool $includeHidden Export hidden/disable records. Default: false
+     * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
+     * @param bool $includeDeleted Export deleted records. Default: **false**
+     * @param bool $includeHidden Export hidden/disable records. Default: **false**
      */
     public function backendGroupsCommand(
         $file = null,
@@ -79,9 +79,9 @@ class ExportCommandController extends AbstractCommandController
      * @since 1.0.0
      *
      * @param string $file Path to the yml file. It is advised to store this outside of the web root.
-     * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
-     * @param bool $includeDeleted Export deleted records. Default: false
-     * @param bool $includeHidden Export hidden/disable records. Default: false
+     * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
+     * @param bool $includeDeleted Export deleted records. Default: **false**
+     * @param bool $includeHidden Export hidden/disable records. Default: **false**
      */
     public function frontendUsersCommand(
         $file = null,
@@ -98,9 +98,9 @@ class ExportCommandController extends AbstractCommandController
      * @since 1.0.0
      *
      * @param string $file Path to the yml file. It is advised to store this outside of the web root.
-     * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
-     * @param bool $includeDeleted Export deleted records. Default: false
-     * @param bool $includeHidden Export hidden/disable records. Default: false
+     * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
+     * @param bool $includeDeleted Export deleted records. Default: **false**
+     * @param bool $includeHidden Export hidden/disable records. Default: **false**
      */
     public function frontendGroupsCommand(
         $file = null,
@@ -118,9 +118,9 @@ class ExportCommandController extends AbstractCommandController
      *
      * @param string $table The name of the table to export
      * @param string $file Path to the yml file. It is advised to store this outside of the web root.
-     * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
-     * @param bool $includeDeleted Dump deleted records. Default: false
-     * @param bool $includeHidden Dump hidden/disable records. Default: false
+     * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
+     * @param bool $includeDeleted Dump deleted records. Default: **false**
+     * @param bool $includeHidden Dump hidden/disable records. Default: **false**
      */
     public function tableCommand(
         $table,
@@ -140,8 +140,8 @@ class ExportCommandController extends AbstractCommandController
      * @param string $table
      * @param string $file Path to the yml file. It is advised to store this outside of the web root.
      * @param string $skipColumns
-     * @param bool $includeDeleted Export deleted records. Default: false
-     * @param bool $includeHidden Export hidden/disable records. Default: false
+     * @param bool $includeDeleted Export deleted records. Default: **false**
+     * @param bool $includeHidden Export hidden/disable records. Default: **false**
      *
      * @return void
      */

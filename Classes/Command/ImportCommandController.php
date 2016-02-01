@@ -42,7 +42,7 @@ class ImportCommandController extends AbstractCommandController
      *
      * @since 1.0.0
      *
-     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: username
+     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: **username**
      * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
     public function backendUsersCommand($matchFields = 'username', $file = null)
@@ -56,7 +56,7 @@ class ImportCommandController extends AbstractCommandController
      *
      * @since 1.0.0
      *
-     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: title
+     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: **title**
      * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
     public function backendGroupsCommand($matchFields = 'title', $file = null)
@@ -70,7 +70,7 @@ class ImportCommandController extends AbstractCommandController
      *
      * @since 1.0.0
      *
-     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: username
+     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: **username**
      * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
     public function frontendUsersCommand($matchFields = 'username', $file = null)
@@ -84,7 +84,7 @@ class ImportCommandController extends AbstractCommandController
      *
      * @since 1.0.0
      *
-     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: title
+     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: **title**
      * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
     public function frontendGroupsCommand($matchFields = 'title', $file = null)

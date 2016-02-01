@@ -12,7 +12,7 @@ Command Reference
 
 .. note:
 
-  This reference uses `./typo3/cli_dispatch.php extbase` as the command to
+  This reference uses ``./typo3/cli_dispatch.php extbase`` as the command to
   invoke.
 
 The commands in this reference are shown with their full command identifiers.
@@ -26,7 +26,7 @@ commands that may be available, use::
   ./typo3/cli_dispatch.php extbase help
 
 .. note::
-  Some commands accept parameters. See `./typo3/cli_dispatch.phpsh extbase help <command identifier>` for more information about a specific command.
+  Some commands accept parameters. See ``./typo3/cli_dispatch.phpsh extbase help <command identifier>`` for more information about a specific command.
 
 The following reference was automatically generated from code on 01-02-16
 
@@ -53,11 +53,11 @@ Options
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
-  A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+  A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
 ``--include-deleted``
-  Export deleted records. Default: false
+  Export deleted records. Default: **false**
 ``--include-hidden``
-  Export hidden/disable records. Default: false
+  Export hidden/disable records. Default: **false**
 
 
 
@@ -77,11 +77,11 @@ Options
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
-  A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+  A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
 ``--include-deleted``
-  Export deleted records. Default: false
+  Export deleted records. Default: **false**
 ``--include-hidden``
-  Export hidden/disable records. Default: false
+  Export hidden/disable records. Default: **false**
 
 
 
@@ -101,11 +101,11 @@ Options
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
-  A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+  A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
 ``--include-deleted``
-  Export deleted records. Default: false
+  Export deleted records. Default: **false**
 ``--include-hidden``
-  Export hidden/disable records. Default: false
+  Export hidden/disable records. Default: **false**
 
 
 
@@ -125,11 +125,11 @@ Options
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
-  A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+  A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
 ``--include-deleted``
-  Export deleted records. Default: false
+  Export deleted records. Default: **false**
 ``--include-hidden``
-  Export hidden/disable records. Default: false
+  Export hidden/disable records. Default: **false**
 
 
 
@@ -155,11 +155,11 @@ Options
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
-  A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+  A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
 ``--include-deleted``
-  Dump deleted records. Default: false
+  Dump deleted records. Default: **false**
 ``--include-hidden``
-  Dump hidden/disable records. Default: false
+  Dump hidden/disable records. Default: **false**
 
 
 
