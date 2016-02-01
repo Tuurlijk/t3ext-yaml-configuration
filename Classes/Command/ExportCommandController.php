@@ -37,12 +37,12 @@ class ExportCommandController extends AbstractCommandController
     /**
      * Export be_users table to yml file
      *
-     * @param array $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+     * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
      * @param bool $includeDeleted Export deleted records. Default: false
      * @param bool $includeHidden Export hidden/disable records. Default: false
      */
     public function backendUsersCommand(
-        $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
+        $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false
     ) {
@@ -51,12 +51,12 @@ class ExportCommandController extends AbstractCommandController
     /**
      * Export be_groups table to yml file
      *
-     * @param array $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+     * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
      * @param bool $includeDeleted Export deleted records. Default: false
      * @param bool $includeHidden Export hidden/disable records. Default: false
      */
     public function backendGroupsCommand(
-        $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
+        $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false
     ) {
@@ -66,12 +66,12 @@ class ExportCommandController extends AbstractCommandController
     /**
      * Export fe_users table to yml file
      *
-     * @param array $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+     * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
      * @param bool $includeDeleted Export deleted records. Default: false
      * @param bool $includeHidden Export hidden/disable records. Default: false
      */
     public function frontendUsersCommand(
-        $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
+        $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false
     ) {
@@ -81,12 +81,12 @@ class ExportCommandController extends AbstractCommandController
     /**
      * Export fe_groups table to yml file
      *
-     * @param array $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+     * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
      * @param bool $includeDeleted Export deleted records. Default: false
      * @param bool $includeHidden Export hidden/disable records. Default: false
      */
     public function frontendGroupsCommand(
-        $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
+        $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false
     ) {
@@ -97,13 +97,13 @@ class ExportCommandController extends AbstractCommandController
      * Export a table to yml file
      *
      * @param string $table The name of the table to export
-     * @param array $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
+     * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
      * @param bool $includeDeleted Dump deleted records. Default: false
      * @param bool $includeHidden Dump hidden/disable records. Default: false
      */
     public function tableCommand(
         $table,
-        $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
+        $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false
     ) {
@@ -114,7 +114,7 @@ class ExportCommandController extends AbstractCommandController
      * Export table table to yml file
      *
      * @param string $table
-     * @param array $skipColumns
+     * @param string $skipColumns
      * @param bool $includeDeleted Export deleted records. Default: false
      * @param bool $includeHidden Export hidden/disable records. Default: false
      *
@@ -122,11 +122,12 @@ class ExportCommandController extends AbstractCommandController
      */
     public function exportTable(
         $table,
-        $skipColumns = array('crdate', 'lastlogin', 'tstamp', 'uc'),
+        $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false
     ) {
         $table = preg_replace('/[^a-z0-9_]/', '', $table);
+        $skipColumns = explode(',', $skipColumns);
         $this->headerMessage('Exporting ' . $table . ' configuration');
         $yaml = '';
         $columnNames = $this->getColumnNames($table);
