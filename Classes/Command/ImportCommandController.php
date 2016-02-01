@@ -24,6 +24,7 @@ namespace MaxServ\YamlConfiguration\Command;
  */
 
 use Symfony\Component\Yaml\Yaml;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Imports data into tables from YAML configuration
@@ -37,44 +38,48 @@ class ImportCommandController extends AbstractCommandController
      * Import backend user configuration from yml files
      * Import backend user configuration from yml files into be_users table. Existing records will be updated.
      *
-     * @param string $matchField Field used to match configurations to database records. Default: uid
+     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: username
+     * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
-    public function backendUsersCommand($matchField = 'uid')
+    public function backendUsersCommand($matchFields = 'username', $file = null)
     {
-        $this->importData('be_users', $matchField);
+        $this->importData('be_users', $matchFields, $file);
     }
 
     /**
      * Import backend group configuration from yml files
      * Import backend group configuration from yml files into be_users table. Existing records will be updated.
      *
-     * @param string $matchField Field used to match configurations to database records. Default: uid
+     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: title
+     * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
-    public function backendGroupsCommand($matchField = 'uid')
+    public function backendGroupsCommand($matchFields = 'title', $file = null)
     {
-        $this->importData('be_groups', $matchField);
+        $this->importData('be_groups', $matchFields, $file);
     }
 
     /**
      * Import frontend user configuration from yml files
      * Import frontend user configuration from yml files into fe_users table. Existing records will be updated.
      *
-     * @param string $matchField Field used to match configurations to database records. Default: uid
+     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: username
+     * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
-    public function frontendUsersCommand($matchField = 'uid')
+    public function frontendUsersCommand($matchFields = 'username', $file = null)
     {
-        $this->importData('fe_users', $matchField);
+        $this->importData('fe_users', $matchFields, $file);
     }
 
     /**
      * Import frontend group configuration from yml files
      * Import frontend group configuration from yml files into fe_users table. Existing records will be updated.
      *
-     * @param string $matchField Field used to match configurations to database records. Default: uid
+     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: title
+     * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
-    public function frontendGroupsCommand($matchField = 'uid')
+    public function frontendGroupsCommand($matchFields = 'title', $file = null)
     {
-        $this->importData('fe_groups', $matchField);
+        $this->importData('fe_groups', $matchFields, $file);
     }
 
     /**
@@ -82,52 +87,71 @@ class ImportCommandController extends AbstractCommandController
      * Import data from yml files into a table. Existing records will be updated.
      *
      * @param string $table The name of the table to export
-     * @param string $matchFields Field used to match configurations to database records. Default: uid
+     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: uid
+     * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
-    public function tableCommand($table, $matchFields = 'uid')
+    public function tableCommand($table, $matchFields = 'uid', $file = null)
     {
-        $this->importData($table, $matchFields);
+        $this->importData($table, $matchFields, $file);
     }
 
     /**
      * Import Data
      *
      * @param $table
-     * @param $matchField
+     * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: uid
+     * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
-    protected function importData($table, $matchField)
+    protected function importData($table, $matchFields = 'uid', $file = null)
     {
+        var_dump($matchFields);
         $table = preg_replace('/[^a-z0-9_]/', '', $table);
-        $matchField = preg_replace('/[^a-z0-9_]/', '', $matchField);
+        $matchFields = explode(',', preg_replace('/[^a-z0-9_,]/', '', $matchFields));
+        $columnNames = $this->getColumnNames($table);
+        $this->doMatchFieldsExist($matchFields, $columnNames);
+        if ($file === null) {
+            $configurationFiles = $this->findYamlFiles();
+        } else {
+            $file = GeneralUtility::getFileAbsFileName($file);
+            $configurationFiles = array($file);
+        }
         $this->headerMessage('Importing ' . $table . ' configuration');
-        foreach ($this->findYamlFiles() as $configurationFile) {
+        foreach ($configurationFiles as $configurationFile) {
             $configuration = $this->parseConfigurationFile($configurationFile);
             $this->infoMessage('Parsing: ' . str_replace(PATH_site, '', $configurationFile));
-            $records = $this->getAccessConfiguration($configuration, $table);
+            $records = $this->getDataConfiguration($configuration, $table);
             foreach ($records as $record) {
                 $record = $this->flattenYamlFields($record);
                 $row = false;
-                if (isset($record[$matchField])) {
-                    $record[$matchField] = $this->databaseConnection->quoteStr($record[$matchField], $table);
+                $matchClauseParts = array();
+                foreach ($matchFields as $matchField) {
+                    if (isset($record[$matchField])) {
+                        $matchClauseParts[] =
+                            $matchField . ' = "' . $this->databaseConnection->quoteStr($record[$matchField], $table) . '"';
+                    }
+                }
+                $matchClause = (count($matchClauseParts)) ? implode(' AND ', $matchClauseParts) : '';
+                if ($matchClause) {
                     $row = $this->databaseConnection->exec_SELECTgetSingleRow(
                         '*',
                         $table,
-                        $matchField . ' = ' . $record[$matchField]
+                        $matchClause
                     );
                 }
                 if ($row) {
-                    $this->successMessage('Found existing ' . $table . ' with ' . $matchField . ' ' . $record[$matchField]);
+                    $this->successMessage('Found existing ' . $table . ' record by matchfields: ' . $matchClause);
                     $this->message('Updating . . .');
                     $this->databaseConnection->exec_UPDATEquery(
                         $table,
-                        $matchField . ' = ' . $record[$matchField],
+                        $matchClause,
                         $record
                     );
                 } else {
+                    $this->successMessage('Found NO existing ' . $table . ' record by matchfields: ' . $matchClause);
                     $this->message('Adding . . .');
                     $this->databaseConnection->exec_INSERTquery(
                         $table,
-                        $record
+                        $this->removeAutoIncrementFields($record, $table)
                     );
                 }
             }

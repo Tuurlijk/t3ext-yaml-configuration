@@ -67,6 +67,13 @@ class AbstractCommandController extends CommandController
     protected $databaseConnection;
 
     /**
+     * Cache of auto increment fields
+     *
+     * @var array
+     */
+    protected $autoIncrementFieldCache = array();
+
+    /**
      * Cache of table column names
      *
      * @var array
@@ -74,11 +81,102 @@ class AbstractCommandController extends CommandController
     protected $tableColumnCache = array();
 
     /**
+     * Cache of primary key fields
+     *
+     * @var array
+     */
+    protected $primaryKeyFieldCache = array();
+
+    /**
      * ExportCommandController constructor.
      */
     public function __construct()
     {
         $this->databaseConnection = $GLOBALS['TYPO3_DB'];
+    }
+
+    /**
+     * Check if matchFields exist in the table.
+     *
+     * @param array $matchFields
+     * @param array $columnNames
+     * @return bool
+     */
+    protected function doMatchFieldsExist($matchFields, $columnNames)
+    {
+        $nonExisting = array();
+        foreach ($matchFields as $matchField) {
+            if (!in_array($matchField, $columnNames)) {
+                $nonExisting[] = $matchField;
+            }
+        }
+        if (count($nonExisting)) {
+            $this->errorMessage('Some matchFields do not exist: ' . implode(',', $matchFields));
+            exit;
+        }
+        return true;
+    }
+
+    /**
+     * Get AUTO_INCREMENT fields from $table
+     *
+     * @param string $table
+     * @return array
+     */
+    protected function getAutoIncrementFields($table)
+    {
+        $table = preg_replace('/[^a-z0-9_]/', '', $table);
+        if (isset($this->autoIncrementFieldCache[$table])) {
+            return $this->autoIncrementFieldCache[$table];
+        } else {
+            $fields = array();
+            if (!$table) {
+                return $fields;
+            }
+            $result = $this->databaseConnection->sql_query(
+                "SHOW COLUMNS FROM `" . $table . "`;"
+            );
+            while (($row = $this->databaseConnection->sql_fetch_assoc($result))) {
+                if ($row['Extra'] == 'auto_increment') {
+                    $fields[] = $row['Field'];
+                }
+            };
+            $this->databaseConnection->sql_free_result($result);
+
+            $this->autoIncrementFieldCache[$table] = $fields;
+
+            return $fields;
+        }
+    }
+    
+    /**
+     * Get Primary key fields from $table
+     *
+     * @param string $table
+     * @return array
+     */
+    protected function getPrimaryKeyFields($table)
+    {
+        $table = preg_replace('/[^a-z0-9_]/', '', $table);
+        if (isset($this->primaryKeyFieldCache[$table])) {
+            return $this->primaryKeyFieldCache[$table];
+        } else {
+            $fields = array();
+            if (!$table) {
+                return $fields;
+            }
+            $result = $this->databaseConnection->sql_query(
+                "SHOW KEYS FROM `" . $table . "` WHERE `Key_name` = 'PRIMARY';"
+            );
+            while (($row = $this->databaseConnection->sql_fetch_row($result))) {
+                $fields[] = $row['Column_name'];
+            };
+            $this->databaseConnection->sql_free_result($result);
+
+            $this->primaryKeyFieldCache[$table] = $fields;
+
+            return $fields;
+        }
     }
 
     /**
@@ -205,6 +303,26 @@ class AbstractCommandController extends CommandController
         }
 
         return $configuration;
+    }
+
+    /**
+     * Remove auto_increment type fields from array
+     *
+     * @param array $fields
+     * @param string $table
+     *
+     * @return array
+     */
+    protected function removeAutoIncrementFields($fields, $table)
+    {
+        $autoIncrementFields = $this->getAutoIncrementFields($table);
+        foreach ($fields as $key => $value) {
+            if (in_array($key, $autoIncrementFields)) {
+                unset($fields[$key]);
+            }
+        }
+
+        return $fields;
     }
 
     /**

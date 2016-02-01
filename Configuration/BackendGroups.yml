@@ -1,6 +1,6 @@
 ---
 TYPO3:
-  Access:
+  Data:
     be_groups:
       -
         cruser_id: "2"

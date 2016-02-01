@@ -1,6 +1,6 @@
 ---
 TYPO3:
-  Access:
+  Data:
     be_users:
       -
         admin: "1"
