@@ -140,7 +140,7 @@ class ImportCommandController extends AbstractCommandController
                 if ($row) {
                     $this->successMessage('Found existing ' . $table . ' record by matchfields: ' . $matchClause);
                     $this->message('Updating . . .');
-                    $record = $this->updateTimeFields($row, $columnNames, array('tstamp'));
+                    $record = $this->updateTimeFields($record, $columnNames, array('tstamp'));
                     $this->databaseConnection->exec_UPDATEquery(
                         $table,
                         $matchClause,
@@ -149,7 +149,7 @@ class ImportCommandController extends AbstractCommandController
                 } else {
                     $this->successMessage('Found NO existing ' . $table . ' record by matchfields: ' . $matchClause);
                     $this->message('Adding . . .');
-                    $record = $this->updateTimeFields($row, $columnNames, array('crdate', 'tstamp'));
+                    $record = $this->updateTimeFields($record, $columnNames, array('crdate', 'tstamp'));
                     $this->databaseConnection->exec_INSERTquery(
                         $table,
                         $this->removeAutoIncrementFields($record, $table)
