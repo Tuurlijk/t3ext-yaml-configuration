@@ -56,6 +56,8 @@ YAML-Configuration
 		:glob:
 
 		Introduction/Index
+		UserManual/Index
+		CommandReference/Index
 		Changelog/Index
 
 .. only:: latex
@@ -66,4 +68,6 @@ YAML-Configuration
 		:glob:
 
 		Introduction/Index
+		UserManual/Index
+		CommandReference/Index
 		Changelog/Index
