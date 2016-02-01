@@ -156,7 +156,9 @@ class ExportCommandController extends AbstractCommandController
         $skipColumns = explode(',', $skipColumns);
         $this->headerMessage('Exporting ' . $table . ' configuration');
         if (!$file) {
-            $this->warningMessage('No --file parameter specified. Data will be written to typo3temp/. This is pretty unsecure.');
+            $this->message('No ' . $this->successString('--file') .
+                ' parameter specified. Data will be written to typo3temp/. ' .
+                $this->warningString('This is pretty unsecure.'));
         } else {
             $filePath = GeneralUtility::getFileAbsFileName($file);
             if (strpos($filePath, PATH_site) !== false) {
