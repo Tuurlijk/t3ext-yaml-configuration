@@ -108,6 +108,7 @@ class TsConfigCommandController extends AbstractCommandController
                     }
                     $fileContent = implode(PHP_EOL, $lines);
                     $filePath = PATH_site . 'typo3temp/tx_yamlconfiguration/' . $key . '.ts';
+                    GeneralUtility::mkdir_deep(PATH_site . 'typo3temp/tx_yamlconfiguration/');
                     GeneralUtility::writeFile(
                         $filePath,
                         (string)$fileContent
