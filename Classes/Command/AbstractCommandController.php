@@ -326,6 +326,26 @@ class AbstractCommandController extends CommandController
     }
 
     /**
+     * Update timestamp fields
+     *
+     * @param array $row
+     * @param array $columnNames
+     * @param array $fields
+     *
+     * @return array
+     */
+    protected function updateTimeFields($row, $columnNames, $fields = array('crdate', 'tsamp'))
+    {
+        foreach ($fields as $field) {
+            if (in_array($field, $columnNames) && !array_key_exists($field, $row)) {
+                $row[$field] = time();
+            }
+        }
+
+        return $row;
+    }
+
+    /**
      * Get Data configuration from configuration string
      *
      * @param $configuration
