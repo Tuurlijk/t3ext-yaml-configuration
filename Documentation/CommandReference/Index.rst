@@ -10,8 +10,7 @@
 Command Reference
 =================
 
-.. note:
-
+.. note::
   This reference uses ``./typo3/cli_dispatch.php extbase`` as the command to
   invoke.
 
