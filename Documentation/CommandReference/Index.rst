@@ -47,6 +47,7 @@ yaml_configuration:export:backendgroups
 
 Options
 ^^^^^^^
+
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
@@ -68,6 +69,7 @@ yaml_configuration:export:backendusers
 
 Options
 ^^^^^^^
+
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
@@ -89,6 +91,7 @@ yaml_configuration:export:frontendgroups
 
 Options
 ^^^^^^^
+
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
@@ -110,6 +113,7 @@ yaml_configuration:export:frontendusers
 
 Options
 ^^^^^^^
+
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
@@ -129,6 +133,7 @@ yaml_configuration:export:table
 
 Arguments
 ^^^^^^^^^
+
 ``--table``
   The name of the table to export
 
@@ -136,6 +141,7 @@ Arguments
 
 Options
 ^^^^^^^
+
 ``--file``
   Path to the yml file. It is advised to store this outside of the web root.
 ``--skip-columns``
@@ -157,6 +163,7 @@ Import backend groups from yml file into be_users table. Existing records will b
 
 Options
 ^^^^^^^
+
 ``--match-fields``
   Comma separated list of fields used to match configurations to database records. Default: title
 ``--file``
@@ -174,6 +181,7 @@ Import backend users from yml file into be_users table. Existing records will be
 
 Options
 ^^^^^^^
+
 ``--match-fields``
   Comma separated list of fields used to match configurations to database records. Default: username
 ``--file``
@@ -191,6 +199,7 @@ Import frontend groups from yml file into fe_users table. Existing records will 
 
 Options
 ^^^^^^^
+
 ``--match-fields``
   Comma separated list of fields used to match configurations to database records. Default: title
 ``--file``
@@ -208,6 +217,7 @@ Import frontend users from yml file into fe_users table. Existing records will b
 
 Options
 ^^^^^^^
+
 ``--match-fields``
   Comma separated list of fields used to match configurations to database records. Default: username
 ``--file``
@@ -223,6 +233,7 @@ yaml_configuration:import:table
 Import table data from yml file. Existing records will be updated.
 Arguments
 ^^^^^^^^^
+
 ``--table``
   The name of the table to export
 ``--match-fields``
@@ -232,6 +243,7 @@ Arguments
 
 Options
 ^^^^^^^
+
 ``--file``
   Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
 
@@ -247,6 +259,7 @@ yaml_configuration:tsconfig:generate
 
 Options
 ^^^^^^^
+
 ``--file``
   Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
 
