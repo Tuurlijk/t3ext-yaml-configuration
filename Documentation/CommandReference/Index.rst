@@ -12,7 +12,7 @@ Command Reference
 
 .. note:
 
-  This reference uses ``./typo3/cli_dispatch.php extbase`` as the command to
+  This reference uses `./typo3/cli_dispatch.php extbase` as the command to
   invoke.
 
 The commands in this reference are shown with their full command identifiers.
@@ -26,7 +26,7 @@ commands that may be available, use::
   ./typo3/cli_dispatch.php extbase help
 
 .. note::
-  Some commands accept parameters. See './typo3/cli_dispatch.phpsh extbase help <command identifier>' for more information about a specific command.
+  Some commands accept parameters. See `./typo3/cli_dispatch.phpsh extbase help <command identifier>` for more information about a specific command.
 
 The following reference was automatically generated from code on 01-02-16
 
@@ -42,6 +42,8 @@ yaml_configuration:export:backendgroups
 ***************************************
 
 **Export be_groups table to yml file**
+
+
 
 
 
@@ -67,6 +69,8 @@ yaml_configuration:export:backendusers
 
 
 
+
+
 Options
 ^^^^^^^
 
@@ -86,6 +90,8 @@ yaml_configuration:export:frontendgroups
 ****************************************
 
 **Export fe_groups table to yml file**
+
+
 
 
 
@@ -111,6 +117,8 @@ yaml_configuration:export:frontendusers
 
 
 
+
+
 Options
 ^^^^^^^
 
@@ -130,6 +138,8 @@ yaml_configuration:export:table
 *******************************
 
 **Export a table to yml file**
+
+
 
 Arguments
 ^^^^^^^^^
@@ -158,14 +168,16 @@ yaml_configuration:import:backendgroups
 ***************************************
 
 **Import backend groups from yml file**
+
 Import backend groups from yml file into be_users table. Existing records will be updated.
+
 
 
 Options
 ^^^^^^^
 
 ``--match-fields``
-  Comma separated list of fields used to match configurations to database records. Default: title
+  Comma separated list of fields used to match configurations to database records. Default: **title**
 ``--file``
   Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
 
@@ -176,14 +188,16 @@ yaml_configuration:import:backendusers
 **************************************
 
 **Import backend users from yml file**
+
 Import backend users from yml file into be_users table. Existing records will be updated.
+
 
 
 Options
 ^^^^^^^
 
 ``--match-fields``
-  Comma separated list of fields used to match configurations to database records. Default: username
+  Comma separated list of fields used to match configurations to database records. Default: **username**
 ``--file``
   Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
 
@@ -194,14 +208,16 @@ yaml_configuration:import:frontendgroups
 ****************************************
 
 **Import frontend groups from yml file**
+
 Import frontend groups from yml file into fe_users table. Existing records will be updated.
+
 
 
 Options
 ^^^^^^^
 
 ``--match-fields``
-  Comma separated list of fields used to match configurations to database records. Default: title
+  Comma separated list of fields used to match configurations to database records. Default: **title**
 ``--file``
   Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
 
@@ -212,14 +228,16 @@ yaml_configuration:import:frontendusers
 ***************************************
 
 **Import frontend users from yml file**
+
 Import frontend users from yml file into fe_users table. Existing records will be updated.
+
 
 
 Options
 ^^^^^^^
 
 ``--match-fields``
-  Comma separated list of fields used to match configurations to database records. Default: username
+  Comma separated list of fields used to match configurations to database records. Default: **username**
 ``--file``
   Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
 
@@ -230,7 +248,9 @@ yaml_configuration:import:table
 *******************************
 
 **Import table data from yml file**
+
 Import table data from yml file. Existing records will be updated.
+
 Arguments
 ^^^^^^^^^
 
@@ -254,6 +274,8 @@ yaml_configuration:tsconfig:generate
 ************************************
 
 **Generate TSConfig configuration files from a YAML configuration**
+
+
 
 
 
