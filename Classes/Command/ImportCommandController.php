@@ -152,7 +152,7 @@ class ImportCommandController extends AbstractCommandController
                     $record = $this->updateTimeFields($record, $columnNames, array('crdate', 'tstamp'));
                     $this->databaseConnection->exec_INSERTquery(
                         $table,
-                        $this->removeAutoIncrementFields($record, $table)
+                        $record
                     );
                 }
             }
