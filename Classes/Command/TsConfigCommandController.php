@@ -47,7 +47,7 @@ class TsConfigCommandController extends AbstractCommandController
      *
      * @return void
      */
-    public function generateTsConfigCommand()
+    public function generateCommand()
     {
         $this->headerMessage('Generating permssions');
         foreach ($this->findYamlFiles() as $configurationFile) {
