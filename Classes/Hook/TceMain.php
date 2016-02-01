@@ -37,11 +37,17 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * This hook works in conjunction with the
  * \MaxServ\YamlConfiguration\User\Condition::hasColumnPosition userFunction
  * in ext_localconf.php.
+ *
+ * @since 1.0.0
  */
 class TceMain
 {
 
     /**
+     * Process Commandmap hook
+     *
+     * @since 1.0.0
+     *
      * @param string $command The TCEmain operation status, fx. 'update'
      * @param string $table The table TCEmain is currently processing
      * @param string $id The records id (if any)

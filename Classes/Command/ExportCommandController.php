@@ -29,6 +29,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Generate TSConfig configuration files from a YAML configuration
  *
+ * @since 1.0.0
+ *
  * @package MaxServ\Export
  * @subpackage Controller
  */
@@ -36,6 +38,8 @@ class ExportCommandController extends AbstractCommandController
 {
     /**
      * Export be_users table to yml file
+     *
+     * @since 1.0.0
      *
      * @param string $file Path to the yml file. It is advised to store this outside of the web root.
      * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
@@ -52,6 +56,8 @@ class ExportCommandController extends AbstractCommandController
     }
     /**
      * Export be_groups table to yml file
+     *
+     * @since 1.0.0
      *
      * @param string $file Path to the yml file. It is advised to store this outside of the web root.
      * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
@@ -70,6 +76,8 @@ class ExportCommandController extends AbstractCommandController
     /**
      * Export fe_users table to yml file
      *
+     * @since 1.0.0
+     *
      * @param string $file Path to the yml file. It is advised to store this outside of the web root.
      * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
      * @param bool $includeDeleted Export deleted records. Default: false
@@ -87,6 +95,8 @@ class ExportCommandController extends AbstractCommandController
     /**
      * Export fe_groups table to yml file
      *
+     * @since 1.0.0
+     *
      * @param string $file Path to the yml file. It is advised to store this outside of the web root.
      * @param string $skipColumns A comma separated list of column names to skip. Default: uc,crdate,lastlogin,tstamp
      * @param bool $includeDeleted Export deleted records. Default: false
@@ -103,6 +113,8 @@ class ExportCommandController extends AbstractCommandController
 
     /**
      * Export a table to yml file
+     *
+     * @since 1.0.0
      *
      * @param string $table The name of the table to export
      * @param string $file Path to the yml file. It is advised to store this outside of the web root.
@@ -122,6 +134,8 @@ class ExportCommandController extends AbstractCommandController
 
     /**
      * Export table table to yml file
+     *
+     * @since 1.0.0
      *
      * @param string $table
      * @param string $file Path to the yml file. It is advised to store this outside of the web root.

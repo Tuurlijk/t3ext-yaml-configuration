@@ -29,6 +29,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Generate TSConfig configuration files from a YAML configuration
  *
+ * @since 1.0.0
  * @package MaxServ\YamlConfiguration
  * @subpackage Controller
  */
@@ -37,6 +38,7 @@ class TsConfigCommandController extends AbstractCommandController
     /**
      * Condition Class prefix
      *
+     * @since 1.0.0
      * @var string
      */
     const CONDITION_PREFIX = 'MaxServ\YamlConfiguration\User\Condition::';
@@ -44,6 +46,8 @@ class TsConfigCommandController extends AbstractCommandController
     /**
      * Generate TSConfig configuration files from a YAML configuration
      * \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig
+     *
+     * @since 1.0.0
      *
      * @return void
      */
@@ -122,6 +126,8 @@ class TsConfigCommandController extends AbstractCommandController
 
     /**
      * Get TCEFORM configuration from configuration string
+     *
+     * @since 1.0.0
      *
      * @param $configuration
      *

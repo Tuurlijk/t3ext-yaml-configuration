@@ -29,21 +29,33 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class Condition
+ *
+ * @since 1.0.0
  */
 class Condition
 {
     /**
+     * Backend User
+     *
+     * @since 1.0.0
+     *
      * @var BackendUserAuthentication
      */
     protected static $backendUser = null;
 
     /**
+     * Database connection
+     *
+     * @since 1.0.0
+     *
      * @var DatabaseConnection
      */
     protected $databaseConnection = null;
 
     /**
      * setter for backendUser object
+     *
+     * @since 1.0.0
      *
      * @param BackendUserAuthentication $backendUser
      *
@@ -59,6 +71,8 @@ class Condition
     /**
      * getter for backendUser object
      *
+     * @since 1.0.0
+     *
      * @return BackendUserAuthentication $backendUser
      */
     public static function getBackendUser()
@@ -68,6 +82,8 @@ class Condition
 
     /**
      * setter for databaseConnection object
+     *
+     * @since 1.0.0
      *
      * @param DatabaseConnection $databaseConnection
      *
@@ -82,6 +98,8 @@ class Condition
 
     /**
      * getter for databaseConnection object
+     *
+     * @since 1.0.0
      *
      * @return DatabaseConnection $databaseConnection
      */
@@ -116,6 +134,8 @@ class Condition
      * 4). Elements are pasted from a clipboard.
      * Any clipboard data? Then we're copying or moving elements. In that
      * case use the newColPos data stored in the processCmdmap hook.
+     *
+     * @since 1.0.0
      *
      * @param integer $backendLayout id of the colPos
      *
@@ -163,7 +183,9 @@ class Condition
      * This is used in the YamlConfiguration.ts TSConfig file to make sure only
      * certain content elements are placed in certain columns.
      *
-     * @see tx_wwwtuenl_hasBackendLayout for documentation
+     * @see hasBackendLayout for documentation
+     *
+     * @since 1.0.0
      *
      * @param int $colPos id of the colPos
      *
@@ -221,6 +243,8 @@ class Condition
      * This is used in the YamlConfiguration.ts TSConfig file change configuration for
      * certain content elements
      *
+     * @since 1.0.0
+     *
      * @param string $cType Identifier of the CType
      *
      * @return boolean
@@ -259,6 +283,8 @@ class Condition
      * This is used in the YamlConfiguration.ts TSConfig file change configuration for
      * certain content elements
      *
+     * @since 1.0.0
+     *
      * @param string $listType Identifier of the list_type
      *
      * @return boolean
@@ -295,6 +321,8 @@ class Condition
     /**
      * Check if current Backend user is in the given UserGroup
      *
+     * @since 1.0.0
+     *
      * @param integer|string $role Identifier of the userGroup
      *
      * @return boolean
@@ -325,7 +353,9 @@ class Condition
      * doktype This is used in the YamlConfiguration.ts TSConfig file to make
      * sure only certain content elements are placed in certain columns.
      *
-     * @see tx_wwwtuenl_hasBackendLayout for documentation
+     * @see hasBackendLayout for documentation
+     *
+     * @since 1.0.0
      *
      * @param integer $doktype id of the doktype
      *

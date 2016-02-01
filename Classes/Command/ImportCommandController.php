@@ -29,14 +29,18 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Imports data into tables from YAML configuration
  *
+ * @since 1.0.0
+ *
  * @package MaxServ\Import
  * @subpackage Controller
  */
 class ImportCommandController extends AbstractCommandController
 {
     /**
-     * Import backend user configuration from yml files
-     * Import backend user configuration from yml files into be_users table. Existing records will be updated.
+     * Import backend users from yml file
+     * Import backend users from yml file into be_users table. Existing records will be updated.
+     *
+     * @since 1.0.0
      *
      * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: username
      * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
@@ -47,8 +51,10 @@ class ImportCommandController extends AbstractCommandController
     }
 
     /**
-     * Import backend group configuration from yml files
-     * Import backend group configuration from yml files into be_users table. Existing records will be updated.
+     * Import backend groups from yml file
+     * Import backend groups from yml file into be_users table. Existing records will be updated.
+     *
+     * @since 1.0.0
      *
      * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: title
      * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
@@ -59,8 +65,10 @@ class ImportCommandController extends AbstractCommandController
     }
 
     /**
-     * Import frontend user configuration from yml files
-     * Import frontend user configuration from yml files into fe_users table. Existing records will be updated.
+     * Import frontend users from yml file
+     * Import frontend users from yml file into fe_users table. Existing records will be updated.
+     *
+     * @since 1.0.0
      *
      * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: username
      * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
@@ -71,8 +79,10 @@ class ImportCommandController extends AbstractCommandController
     }
 
     /**
-     * Import frontend group configuration from yml files
-     * Import frontend group configuration from yml files into fe_users table. Existing records will be updated.
+     * Import frontend groups from yml file
+     * Import frontend groups from yml file into fe_users table. Existing records will be updated.
+     *
+     * @since 1.0.0
      *
      * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: title
      * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
@@ -83,8 +93,10 @@ class ImportCommandController extends AbstractCommandController
     }
 
     /**
-     * Import data into table from yml files
-     * Import data from yml files into a table. Existing records will be updated.
+     * Import table data from yml file
+     * Import table data from yml file. Existing records will be updated.
+     *
+     * @since 1.0.0
      *
      * @param string $table The name of the table to export
      * @param string $matchFields Comma separated list of fields used to match configurations to database records.
@@ -97,6 +109,8 @@ class ImportCommandController extends AbstractCommandController
 
     /**
      * Import Data
+     *
+     * @since 1.0.0
      *
      * @param $table
      * @param string $matchFields Comma separated list of fields used to match configurations to database records.

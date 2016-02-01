@@ -48,6 +48,8 @@ if (@exec('tput cols')) {
 /**
  * Abstract Command Controller
  *
+ * @since 1.0.0
+ *
  * @package B13\DamFalmigration
  * @subpackage Controller
  */
@@ -57,17 +59,25 @@ class AbstractCommandController extends CommandController
     /**
      * Relative path to the Yaml Configuration directory
      *
+     * @since 1.0.0
+     *
      * @var string
      */
     const CONFIGURATION_DIRECTORY = 'Configuration/';
 
     /**
+     * Database connection
+     *
+     * @since 1.0.0
+     *
      * @var \TYPO3\CMS\Core\Database\DatabaseConnection
      */
     protected $databaseConnection;
 
     /**
      * Cache of auto increment fields
+     *
+     * @since 1.0.0
      *
      * @var array
      */
@@ -76,6 +86,8 @@ class AbstractCommandController extends CommandController
     /**
      * Cache of table column names
      *
+     * @since 1.0.0
+     *
      * @var array
      */
     protected $tableColumnCache = array();
@@ -83,12 +95,16 @@ class AbstractCommandController extends CommandController
     /**
      * Cache of primary key fields
      *
+     * @since 1.0.0
+     *
      * @var array
      */
     protected $primaryKeyFieldCache = array();
 
     /**
      * ExportCommandController constructor.
+     *
+     * @since 1.0.0
      */
     public function __construct()
     {
@@ -97,6 +113,8 @@ class AbstractCommandController extends CommandController
 
     /**
      * Check if matchFields exist in the table.
+     *
+     * @since 1.0.0
      *
      * @param array $matchFields
      * @param array $columnNames
@@ -119,6 +137,8 @@ class AbstractCommandController extends CommandController
 
     /**
      * Get AUTO_INCREMENT fields from $table
+     *
+     * @since 1.0.0
      *
      * @param string $table
      * @return array
@@ -152,6 +172,8 @@ class AbstractCommandController extends CommandController
     /**
      * Get Primary key fields from $table
      *
+     * @since 1.0.0
+     *
      * @param string $table
      * @return array
      */
@@ -181,6 +203,8 @@ class AbstractCommandController extends CommandController
 
     /**
      * Get column names
+     *
+     * @since 1.0.0
      *
      * @param $table
      *
@@ -227,6 +251,8 @@ class AbstractCommandController extends CommandController
     /**
      * Find YAML configuration files in all active extensions
      *
+     * @since 1.0.0
+     *
      * @return array
      */
     protected function findYamlFiles()
@@ -263,6 +289,8 @@ class AbstractCommandController extends CommandController
     /**
      * Flatten yaml fields into string values.
      *
+     * @since 1.0.0
+     *
      * @param $row
      * @param string $glue
      *
@@ -284,6 +312,8 @@ class AbstractCommandController extends CommandController
     /**
      * Check if the configuration file exists and if the Yaml parser is
      * available
+     *
+     * @since 1.0.0
      *
      * @param $configurationFile
      *
@@ -308,6 +338,8 @@ class AbstractCommandController extends CommandController
     /**
      * Remove auto_increment type fields from array
      *
+     * @since 1.0.0
+     *
      * @param array $fields
      * @param string $table
      *
@@ -328,6 +360,8 @@ class AbstractCommandController extends CommandController
     /**
      * Update timestamp fields
      *
+     * @since 1.0.0
+     *
      * @param array $row
      * @param array $columnNames
      * @param array $fields
@@ -347,6 +381,8 @@ class AbstractCommandController extends CommandController
 
     /**
      * Get Data configuration from configuration string
+     *
+     * @since 1.0.0
      *
      * @param $configuration
      * @param $table
@@ -370,6 +406,8 @@ class AbstractCommandController extends CommandController
     /**
      * Output FlashMessage
      *
+     * @since 1.0.0
+     *
      * @param FlashMessage $message
      *
      * @return void
@@ -390,6 +428,8 @@ class AbstractCommandController extends CommandController
     /**
      * Normal message
      *
+     * @since 1.0.0
+     *
      * @param $message
      * @param boolean $flushOutput
      *
@@ -406,6 +446,8 @@ class AbstractCommandController extends CommandController
 
     /**
      * Informational message
+     *
+     * @since 1.0.0
      *
      * @param string $message
      * @param boolean $showIcon
@@ -433,6 +475,8 @@ class AbstractCommandController extends CommandController
     /**
      * Error message
      *
+     * @since 1.0.0
+     *
      * @param string $message
      * @param boolean $showIcon
      * @param boolean $flushOutput
@@ -458,6 +502,8 @@ class AbstractCommandController extends CommandController
 
     /**
      * Warning message
+     *
+     * @since 1.0.0
      *
      * @param string $message
      * @param boolean $showIcon
@@ -485,6 +531,8 @@ class AbstractCommandController extends CommandController
     /**
      * Success message
      *
+     * @since 1.0.0
+     *
      * @param string $message
      * @param boolean $showIcon
      * @param boolean $flushOutput
@@ -511,6 +559,8 @@ class AbstractCommandController extends CommandController
     /**
      * Info string
      *
+     * @since 1.0.0
+     *
      * @param string $string
      *
      * @return string
@@ -526,6 +576,8 @@ class AbstractCommandController extends CommandController
 
     /**
      * Error string
+     *
+     * @since 1.0.0
      *
      * @param string $string
      *
@@ -543,6 +595,8 @@ class AbstractCommandController extends CommandController
     /**
      * Warning string
      *
+     * @since 1.0.0
+     *
      * @param string $string
      *
      * @return string
@@ -558,6 +612,8 @@ class AbstractCommandController extends CommandController
 
     /**
      * Success string
+     *
+     * @since 1.0.0
      *
      * @param string $string
      *
@@ -575,6 +631,8 @@ class AbstractCommandController extends CommandController
 
     /**
      * Show a header message
+     *
+     * @since 1.0.0
      *
      * @param $message
      * @param string $style
@@ -618,6 +676,8 @@ class AbstractCommandController extends CommandController
 
     /**
      * Show a horizontal line
+     *
+     * @since 1.0.0
      *
      * @param string $style
      * @param boolean $flushOutput
