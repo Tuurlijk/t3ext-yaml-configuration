@@ -20,3 +20,5 @@ Or install it using composer:
     }
 }
 ```
+
+More information on [usage](Documentation/UserManual/Index.rst) and [available commands](Documentation/CommandReference/Index.rst) can be found in the [documentation folder](Documentation/Index.rst).
