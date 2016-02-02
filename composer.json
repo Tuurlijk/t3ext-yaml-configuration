@@ -10,7 +10,10 @@
     "symfony/yaml": "2.7 - 3.99"
   },
   "replace": {
-    "yaml_configuration": "*"
+    "yaml_configuration": "self.version",
+    "yaml-configuration": "self.version",
+    "typo3-ter/yaml_configuration": "self.version",
+    "typo3-ter/yaml-configuration": "self.version"
   },
   "autoload": {
     "psr-4": {
