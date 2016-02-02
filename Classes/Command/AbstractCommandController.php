@@ -263,7 +263,8 @@ class AbstractCommandController extends CommandController
 
         $configurationFiles = array();
         foreach ($activePackages as $package) {
-            if ($package->getPackageKey() === 'yaml-configuration') {
+            if ($package->getPackageKey() === 'yaml-configuration'
+                || $package->getPackageKey() === 'yaml_configuration') {
                 continue;
             }
             if (!($package instanceof PackageInterface)) {

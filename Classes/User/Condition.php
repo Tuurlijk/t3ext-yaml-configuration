@@ -168,7 +168,7 @@ class Condition
 
             // Case 4). Elements pasted from a clipboard
         } elseif (is_array($get['CB'])) {
-            $newColPosData = self::getBackendUser()->getSessionData('core.yaml-configuration.newColPos');
+            $newColPosData = self::getBackendUser()->getSessionData('core.yaml_configuration.newColPos');
             if (is_array($newColPosData) && ($backendLayout == $newColPosData['backend_layout'])) {
                 $result = true;
             };
@@ -228,7 +228,7 @@ class Condition
 
             // Case 4). Elements pasted from a clipboard
         } elseif (is_array($get['CB'])) {
-            $newColPosData = self::getBackendUser()->getSessionData('core.yaml-configuration.newColPos');
+            $newColPosData = self::getBackendUser()->getSessionData('core.yaml_configuration.newColPos');
             if (is_array($newColPosData) && ($colPos == $newColPosData['colPos'])) {
                 $result = true;
             };
@@ -388,7 +388,7 @@ class Condition
 
             // Case 4). Elements pasted from a clipboard
         } elseif (is_array($get['CB'])) {
-            $newColPosData = $this->getBackendUser()->getSessionData('core.yaml-configuration.newColPos');
+            $newColPosData = $this->getBackendUser()->getSessionData('core.yaml_configuration.newColPos');
             if (is_array($newColPosData) && ($doktype == $newColPosData['doktype'])) {
                 $result = true;
             }

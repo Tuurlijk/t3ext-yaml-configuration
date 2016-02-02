@@ -1,5 +1,5 @@
 {
-  "name": "maxserv/yaml-configuration",
+  "name": "maxserv/yaml_configuration",
   "type": "typo3-cms-extension",
   "description": "Export and import any table to and from a YAML file. Generate TSConfig from YAML files.",
   "license": [
@@ -10,7 +10,7 @@
     "symfony/yaml": "~2.7"
   },
   "replace": {
-    "yaml-configuration": "*"
+    "yaml_configuration": "*"
   },
   "autoload": {
     "psr-4": {

@@ -8,13 +8,13 @@
 .. _start:
 
 ========================================================================
-YAML-Configuration
+YAML Configuration
 ========================================================================
 
 .. only:: html
 
 	:Classification:
-			yaml-configuration
+			yaml_configuration
 
 	:Version:
 			|release|
