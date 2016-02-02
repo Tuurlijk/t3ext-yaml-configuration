@@ -8,6 +8,7 @@ git clone https://github.com/MaxServ/t3ext-yaml-configuration.git yaml-configura
 
 Or install it using composer:
 ```bash
+composer config repositories.yamlconfig vcs https://github.com/MaxServ/t3ext-yaml-configuration.git
 composer require maxserv/yaml-configuration
 ```
 
