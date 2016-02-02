@@ -7,18 +7,8 @@ git clone https://github.com/MaxServ/t3ext-yaml-configuration.git yaml-configura
 ```
 
 Or install it using composer:
-```json
-{
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/MaxServ/t3ext-yaml-configuration.git"
-        }
-    ],
-    "require": {
-        "maxserv/yaml-configuration": "*"
-    }
-}
+```bash
+composer require maxserv/yaml-configuration
 ```
 
 More information on [usage](Documentation/UserManual/Index.rst) and [available commands](Documentation/CommandReference/Index.rst) can be found in the [documentation folder](Documentation/Index.rst).
