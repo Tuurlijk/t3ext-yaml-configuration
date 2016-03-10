@@ -125,7 +125,6 @@ class ImportCommandController extends AbstractCommandController
         if ($file === null) {
             $configurationFiles = $this->findYamlFiles();
         } else {
-            $file = GeneralUtility::getFileAbsFileName($file);
             $configurationFiles = array($file);
         }
         $this->headerMessage('Importing ' . $table . ' configuration');
