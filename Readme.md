@@ -1,6 +1,8 @@
 # TYPO3 extension: yaml_configuration
 Export and import any table to and from a YAML file. Generate TSConfig from YAML files.
 
+[![Latest Stable Version](https://poser.pugx.org/maxserv/yaml_configuration/v/stable)](https://packagist.org/packages/maxserv/yaml_configuration) [![Total Downloads](https://poser.pugx.org/maxserv/yaml_configuration/downloads)](https://packagist.org/packages/maxserv/yaml_configuration) [![Latest Unstable Version](https://poser.pugx.org/maxserv/yaml_configuration/v/unstable)](https://packagist.org/packages/maxserv/yaml_configuration) [![License](https://poser.pugx.org/maxserv/yaml_configuration/license)](https://packagist.org/packages/maxserv/yaml_configuration)
+
 Clone it
 ```bash
 git clone https://github.com/MaxServ/t3ext-yaml-configuration.git yaml_configuration
