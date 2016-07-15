@@ -39,7 +39,7 @@ if (DIRECTORY_SEPARATOR !== '\\') {
 }
 
 // Get terminal width
-if (@exec('tput cols')) {
+if (getenv('TERM') && @exec('tput cols')) {
     define('TERMINAL_WIDTH', exec('tput cols'));
 } else {
     define('TERMINAL_WIDTH', 79);
