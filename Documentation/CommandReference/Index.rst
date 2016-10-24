@@ -287,3 +287,15 @@ Options
 
 
 
+Tidy/Format the exported yaml
+=============================
+
+You can tidy exported yaml files using an online tool like: http://www.yamllint.com/.
+If you do not trust online tools, you can also convert it locally with e.g. the following npm packages: ``js-yaml`` and ``json2yaml``.
+
+.. code-block:: bash
+
+   # Install dependencies globally (node.js https://nodejs.org/en/ must be installed in order to run the following command)
+	npm install -g js-yaml json2yaml
+   # Example: reformatting exported be_groups.yml to be_groups.formatted.yml
+	js-yaml be_groups.yml | json2yaml > ./be_groups.formatted.yml
