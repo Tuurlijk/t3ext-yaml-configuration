@@ -13,7 +13,7 @@ User Manual
 
 The import and export tasks can be long running processes. Therefore they are executed using the command line dispatcher.
 
-You can execute the dispathcer from the root of your website:
+You can execute the dispatcher from the root of your website:
 
 .. code-block:: bash
 
