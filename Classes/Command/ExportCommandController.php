@@ -196,7 +196,7 @@ class ExportCommandController extends AbstractCommandController
                     $explodedValue = explode(',', $value);
                     if (count($explodedValue) > 1) {
                         $explodedRow[$column] = $explodedValue;
-                    } elseif ($value) {
+                    } elseif (strlen($value)) {
                         $explodedRow[$column] = $value;
                     }
                 }
