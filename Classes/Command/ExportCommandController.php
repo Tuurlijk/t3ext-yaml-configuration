@@ -193,7 +193,19 @@ class ExportCommandController extends AbstractCommandController
                     if (in_array($column, $skipColumns)) {
                         continue;
                     }
-                    $explodedValue = explode(',', $value);
+
+                    // do not update usergroups by UID when exporting to other systems
+                    // UID maybe diffrent for the same usergroup name
+                    if($table == 'be_users' && $column == 'usergroup' && $value) {
+                        $usergroups = $this->databaseConnection->exec_SELECTgetRows('title', 'be_groups', 'uid IN ('.$value.')');
+                        foreach ($usergroups as $singleUserGroup) {
+                            $usergroupsTitles[] = $singleUserGroup['title'];
+                        }
+                        $explodedValue = $usergroupsTitles;
+                    } else {
+                        $explodedValue = explode(',', $value);
+                    }
+
                     if (count($explodedValue) > 1) {
                         $explodedRow[$column] = $explodedValue;
                     } elseif ($value) {

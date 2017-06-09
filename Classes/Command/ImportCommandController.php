@@ -153,6 +153,9 @@ class ImportCommandController extends AbstractCommandController
                 if ($row) {
                     $this->successMessage('Found existing ' . $table . ' record by matchfields: ' . $matchClause);
                     $this->message('Updating . . .');
+                    if(isset($record['usergroup'])) {
+                        $record['usergroup'] = $this->convertUsergroupNamesToUid($record);
+                    }
                     $record = $this->updateTimeFields($record, $columnNames, array('tstamp'));
                     $this->databaseConnection->exec_UPDATEquery(
                         $table,
@@ -170,5 +173,31 @@ class ImportCommandController extends AbstractCommandController
                 }
             }
         }
+    }
+
+    /**
+     * Usergroup names to uid conversion
+     *
+     * @since 1.0.0
+     *
+     * @param $record database record for the user that is going to import
+     * @return string
+     */
+    protected function convertUsergroupNamesToUid($record)
+    {
+        if(!isset($record['usergroup']))
+            return '';
+
+        foreach(explode(",",$record['usergroup']) as $usergroupTitle) {
+            $whereInCondition .= $whereInCondition ? ",": "";
+            $whereInCondition .= '"'.$usergroupTitle.'"';
+        }
+        $groupsUids = $this->databaseConnection->exec_SELECTgetRows('uid','be_groups','title IN('.$whereInCondition.')');
+        foreach ($groupsUids as $group) {
+            $commaSepratedGroupUids .= $commaSepratedGroupUids ? ",": "";
+            $commaSepratedGroupUids .= $group['uid'];
+        }
+
+        return $commaSepratedGroupUids;
     }
 }
