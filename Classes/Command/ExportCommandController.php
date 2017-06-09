@@ -45,14 +45,16 @@ class ExportCommandController extends AbstractCommandController
      * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
      * @param bool $includeDeleted Export deleted records. Default: **false**
      * @param bool $includeHidden Export hidden/disable records. Default: **false**
+     * @param integer $indentLevel indent level to make yaml file human readable. Default: **2**
      */
     public function backendUsersCommand(
         $file = null,
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
-        $includeHidden = false
+        $includeHidden = false,
+        $indentLevel = 2
     ) {
-        $this->exportTable('be_users', $file, $skipColumns, $includeDeleted, $includeHidden);
+        $this->exportTable('be_users', $file, $skipColumns, $includeDeleted, $includeHidden, $indentLevel);
     }
     /**
      * Export be_groups table to yml file
@@ -63,14 +65,16 @@ class ExportCommandController extends AbstractCommandController
      * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
      * @param bool $includeDeleted Export deleted records. Default: **false**
      * @param bool $includeHidden Export hidden/disable records. Default: **false**
+     * @param integer $indentLevel indent level to make yaml file human readable. Default: **2**
      */
     public function backendGroupsCommand(
         $file = null,
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
-        $includeHidden = false
+        $includeHidden = false,
+        $indentLevel = 2
     ) {
-        $this->exportTable('be_groups', $file, $skipColumns, $includeDeleted, $includeHidden);
+        $this->exportTable('be_groups', $file, $skipColumns, $includeDeleted, $includeHidden, $indentLevel);
     }
 
     /**
@@ -82,14 +86,16 @@ class ExportCommandController extends AbstractCommandController
      * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
      * @param bool $includeDeleted Export deleted records. Default: **false**
      * @param bool $includeHidden Export hidden/disable records. Default: **false**
+     * @param integer $indentLevel indent level to make yaml file human readable. Default: **2**
      */
     public function frontendUsersCommand(
         $file = null,
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
-        $includeHidden = false
+        $includeHidden = false,
+        $indentLevel = 2
     ) {
-        $this->exportTable('fe_users', $file, $skipColumns, $includeDeleted, $includeHidden);
+        $this->exportTable('fe_users', $file, $skipColumns, $includeDeleted, $includeHidden, $indentLevel);
     }
 
     /**
@@ -101,14 +107,16 @@ class ExportCommandController extends AbstractCommandController
      * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
      * @param bool $includeDeleted Export deleted records. Default: **false**
      * @param bool $includeHidden Export hidden/disable records. Default: **false**
+     * @param integer $indentLevel indent level to make yaml file human readable. Default: **2**
      */
     public function frontendGroupsCommand(
         $file = null,
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
-        $includeHidden = false
+        $includeHidden = false,
+        $indentLevel = 2
     ) {
-        $this->exportTable('fe_groups', $file, $skipColumns, $includeDeleted, $includeHidden);
+        $this->exportTable('fe_groups', $file, $skipColumns, $includeDeleted, $includeHidden, $indentLevel);
     }
 
     /**
@@ -121,15 +129,17 @@ class ExportCommandController extends AbstractCommandController
      * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
      * @param bool $includeDeleted Dump deleted records. Default: **false**
      * @param bool $includeHidden Dump hidden/disable records. Default: **false**
+     * @param integer $indentLevel indent level to make yaml file human readable. Default: **2**
      */
     public function tableCommand(
         $table,
         $file = null,
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
-        $includeHidden = false
+        $includeHidden = false,
+        $indentLevel = 2
     ) {
-        $this->exportTable($table, $file, $skipColumns, $includeDeleted, $includeHidden);
+        $this->exportTable($table, $file, $skipColumns, $includeDeleted, $includeHidden, $indentLevel);
     }
 
     /**
@@ -142,6 +152,7 @@ class ExportCommandController extends AbstractCommandController
      * @param string $skipColumns
      * @param bool $includeDeleted Export deleted records. Default: **false**
      * @param bool $includeHidden Export hidden/disable records. Default: **false**
+     * @param integer $indentLevel indent level to make yaml file human readable. Default: **2**
      *
      * @return void
      */
@@ -150,7 +161,8 @@ class ExportCommandController extends AbstractCommandController
         $file = null,
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
-        $includeHidden = false
+        $includeHidden = false,
+        $indentLevel = 2
     ) {
         $table = preg_replace('/[^a-z0-9_]/', '', $table);
         $skipColumns = explode(',', $skipColumns);
@@ -221,7 +233,7 @@ class ExportCommandController extends AbstractCommandController
                     )
                 )
             );
-            $yaml = Yaml::dump($dump);
+            $yaml = Yaml::dump($dump, $indentLevel);
         }
 
         if ($yaml !== '') {
