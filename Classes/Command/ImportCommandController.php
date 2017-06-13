@@ -178,7 +178,7 @@ class ImportCommandController extends AbstractCommandController
     /**
      * Usergroup names to uid conversion
      *
-     * @since 1.0.0
+     * @since 1.1.0
      *
      * @param $record database record for the user that is going to import
      * @return string
