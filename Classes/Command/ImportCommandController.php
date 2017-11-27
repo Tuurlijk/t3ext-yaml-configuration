@@ -185,14 +185,18 @@ class ImportCommandController extends AbstractCommandController
      */
     protected function convertUsergroupNamesToUid($record)
     {
-        if(!isset($record['usergroup']))
+        if(!isset($record['usergroup'])) {
             return '';
+        }
 
+        $whereInCondition = '';
         foreach(explode(",",$record['usergroup']) as $usergroupTitle) {
             $whereInCondition .= $whereInCondition ? ",": "";
             $whereInCondition .= '"'.$usergroupTitle.'"';
         }
+
         $groupsUids = $this->databaseConnection->exec_SELECTgetRows('uid','be_groups','title IN('.$whereInCondition.')');
+        $commaSepratedGroupUids = '';
         foreach ($groupsUids as $group) {
             $commaSepratedGroupUids .= $commaSepratedGroupUids ? ",": "";
             $commaSepratedGroupUids .= $group['uid'];
