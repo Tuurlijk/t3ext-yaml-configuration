@@ -206,14 +206,17 @@ class ExportCommandController extends AbstractCommandController
                         continue;
                     }
 
-                    // do not update usergroups by UID when exporting to other systems
-                    // UID maybe diffrent for the same usergroup name
-                    if($table == 'be_users' && $column == 'usergroup' && $value) {
-                        $usergroups = $this->databaseConnection->exec_SELECTgetRows('title', 'be_groups', 'uid IN ('.$value.')');
+                    // Do not update usergroups by UID when exporting to other systems
+                    // UID maybe different for the same usergroup name
+                    if ($table == 'be_users' && $column == 'usergroup' && $value) {
+                        $usergroups = $this->databaseConnection->exec_SELECTgetRows('title', 'be_groups', 'uid IN (' . $value . ')');
+                        // @todo Currently the sorting of usergroups in the original records is ignored when exporting usergroups
+                        $usergroupsTitles = [];
                         foreach ($usergroups as $singleUserGroup) {
                             $usergroupsTitles[] = $singleUserGroup['title'];
                         }
                         $explodedValue = $usergroupsTitles;
+                        $value = $usergroupsTitles[0]; // Overwrite $value for case count() == 1, see below
                     } else {
                         $explodedValue = explode(',', $value);
                     }
