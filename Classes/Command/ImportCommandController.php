@@ -52,7 +52,7 @@ class ImportCommandController extends AbstractCommandController
 
     /**
      * Import backend groups from yml file
-     * Import backend groups from yml file into be_users table. Existing records will be updated.
+     * Import backend groups from yml file into be_groups table. Existing records will be updated.
      *
      * @since 1.0.0
      *
@@ -180,7 +180,7 @@ class ImportCommandController extends AbstractCommandController
      *
      * @since 1.1.0
      *
-     * @param $record database record for the user that is going to import
+     * @param array $record Database record for the user that is going to import
      * @return string
      */
     protected function convertUsergroupNamesToUid($record)
