@@ -43,11 +43,13 @@ class ImportCommandController extends AbstractCommandController
      * @since 1.0.0
      *
      * @param string $matchFields Comma separated list of fields used to match configurations to database records. Default: **username**
+     * @param bool $beUserMatchGroupByTitle Match be_group settings in be_users.usergroup by title or uid;
+     *             if true be_groups.title is used. Default: **false**
      * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
-    public function backendUsersCommand($matchFields = 'username', $file = null)
+    public function backendUsersCommand($matchFields = 'username', $beUserMatchGroupByTitle = false, $file = null)
     {
-        $this->importData('be_users', $matchFields, $file);
+        $this->importData('be_users', $matchFields, $beUserMatchGroupByTitle, $file);
     }
 
     /**
@@ -112,11 +114,13 @@ class ImportCommandController extends AbstractCommandController
      *
      * @since 1.0.0
      *
-     * @param $table
+     * @param string $table
      * @param string $matchFields Comma separated list of fields used to match configurations to database records.
+     * @param bool $beUserMatchGroupByTitle Match be_group settings in be_users.usergroup by title or uid;
+     *             if true be_groups.title is used. Default: **false**
      * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
-    protected function importData($table, $matchFields, $file = null)
+    protected function importData($table, $matchFields, $beUserMatchGroupByTitle = false, $file = null)
     {
         $table = preg_replace('/[^a-z0-9_]/', '', $table);
         $matchFields = explode(',', preg_replace('/[^a-z0-9_,]/', '', $matchFields));
@@ -153,7 +157,7 @@ class ImportCommandController extends AbstractCommandController
                 if ($row) {
                     $this->successMessage('Found existing ' . $table . ' record by matchfields: ' . $matchClause);
                     $this->message('Updating . . .');
-                    if(isset($record['usergroup'])) {
+                    if (isset($record['usergroup']) && $beUserMatchGroupByTitle) {
                         $record['usergroup'] = $this->convertUsergroupNamesToUid($record);
                     }
                     $record = $this->updateTimeFields($record, $columnNames, array('tstamp'));
@@ -204,4 +208,5 @@ class ImportCommandController extends AbstractCommandController
 
         return $commaSepratedGroupUids;
     }
+
 }
