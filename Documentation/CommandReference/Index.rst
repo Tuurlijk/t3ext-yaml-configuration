@@ -81,6 +81,8 @@ Options
   Export deleted records. Default: **false**
 ``--include-hidden``
   Export hidden/disable records. Default: **false**
+``--be-user-match-group-by-title``
+  If set to true, references to table be_groups in field ``usergroup`` are stored as group titles not as uid's. Make sure to exclude field ``uid`` in ``--skip-columns`` in order to prevend duplicate entries for primary key ``uid`` when importing the records. Default: **false**
 
 
 
@@ -199,6 +201,8 @@ Options
   Comma separated list of fields used to match configurations to database records. Default: **username**
 ``--file``
   Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
+``--be-user-match-group-by-title``
+  If set to true, references to table ``be_groups`` in field ``usergroup`` are matched using group titles not uid's. Make sure to use option ``--be-user-match-group-by-title`` set to true when exporting the records. Default: **false**
 
 
 

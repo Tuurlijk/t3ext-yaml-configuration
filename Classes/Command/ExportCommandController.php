@@ -36,6 +36,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ExportCommandController extends AbstractCommandController
 {
+
     /**
      * Export be_users table to yml file
      *
@@ -45,16 +46,19 @@ class ExportCommandController extends AbstractCommandController
      * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
      * @param bool $includeDeleted Export deleted records. Default: **false**
      * @param bool $includeHidden Export hidden/disable records. Default: **false**
-     * @param integer $indentLevel indent level to make yaml file human readable. Default: **2**
+     * @param integer $indentLevel Indent level to make yaml file human readable. Default: **2**
+     * @param bool $beUserMatchGroupByTitle Match be_group settings in be_users.usergroup by title or uid;
+     *             if true be_groups.title is used. Default: **false**
      */
     public function backendUsersCommand(
         $file = null,
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false,
-        $indentLevel = 2
+        $indentLevel = 2,
+        $beUserMatchGroupByTitle = false
     ) {
-        $this->exportTable('be_users', $file, $skipColumns, $includeDeleted, $includeHidden, $indentLevel);
+        $this->exportTable('be_users', $file, $skipColumns, $includeDeleted, $includeHidden, $indentLevel, $beUserMatchGroupByTitle);
     }
     /**
      * Export be_groups table to yml file
@@ -65,7 +69,7 @@ class ExportCommandController extends AbstractCommandController
      * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
      * @param bool $includeDeleted Export deleted records. Default: **false**
      * @param bool $includeHidden Export hidden/disable records. Default: **false**
-     * @param integer $indentLevel indent level to make yaml file human readable. Default: **2**
+     * @param integer $indentLevel Indent level to make yaml file human readable. Default: **2**
      */
     public function backendGroupsCommand(
         $file = null,
@@ -86,7 +90,7 @@ class ExportCommandController extends AbstractCommandController
      * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
      * @param bool $includeDeleted Export deleted records. Default: **false**
      * @param bool $includeHidden Export hidden/disable records. Default: **false**
-     * @param integer $indentLevel indent level to make yaml file human readable. Default: **2**
+     * @param integer $indentLevel Indent level to make yaml file human readable. Default: **2**
      */
     public function frontendUsersCommand(
         $file = null,
@@ -107,7 +111,7 @@ class ExportCommandController extends AbstractCommandController
      * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
      * @param bool $includeDeleted Export deleted records. Default: **false**
      * @param bool $includeHidden Export hidden/disable records. Default: **false**
-     * @param integer $indentLevel indent level to make yaml file human readable. Default: **2**
+     * @param integer $indentLevel Indent level to make yaml file human readable. Default: **2**
      */
     public function frontendGroupsCommand(
         $file = null,
@@ -129,7 +133,7 @@ class ExportCommandController extends AbstractCommandController
      * @param string $skipColumns A comma separated list of column names to skip. Default: **uc,crdate,lastlogin,tstamp**
      * @param bool $includeDeleted Dump deleted records. Default: **false**
      * @param bool $includeHidden Dump hidden/disable records. Default: **false**
-     * @param integer $indentLevel indent level to make yaml file human readable. Default: **2**
+     * @param integer $indentLevel Indent level to make yaml file human readable. Default: **2**
      */
     public function tableCommand(
         $table,
@@ -152,7 +156,9 @@ class ExportCommandController extends AbstractCommandController
      * @param string $skipColumns
      * @param bool $includeDeleted Export deleted records. Default: **false**
      * @param bool $includeHidden Export hidden/disable records. Default: **false**
-     * @param integer $indentLevel indent level to make yaml file human readable. Default: **2**
+     * @param integer $indentLevel Indent level to make yaml file human readable. Default: **2**
+     * @param bool $beUserMatchGroupByTitle Match be_group settings in be_users.usergroup by title or uid;
+     *             if true be_groups.title is used. Default: **false**
      *
      * @return void
      */
@@ -162,7 +168,8 @@ class ExportCommandController extends AbstractCommandController
         $skipColumns = 'crdate,lastlogin,tstamp,uc',
         $includeDeleted = false,
         $includeHidden = false,
-        $indentLevel = 2
+        $indentLevel = 2,
+        $beUserMatchGroupByTitle = false
     ) {
         $table = preg_replace('/[^a-z0-9_]/', '', $table);
         $skipColumns = explode(',', $skipColumns);
@@ -208,7 +215,7 @@ class ExportCommandController extends AbstractCommandController
 
                     // Do not update usergroups by UID when exporting to other systems
                     // UID maybe different for the same usergroup name
-                    if ($table == 'be_users' && $column == 'usergroup' && $value) {
+                    if ($beUserMatchGroupByTitle && $table == 'be_users' && $column == 'usergroup' && $value) {
                         $usergroups = $this->databaseConnection->exec_SELECTgetRows('title', 'be_groups', 'uid IN (' . $value . ')');
                         // @todo Currently the sorting of usergroups in the original records is ignored when exporting usergroups
                         $usergroupsTitles = [];
