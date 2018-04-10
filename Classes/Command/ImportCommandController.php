@@ -49,7 +49,7 @@ class ImportCommandController extends AbstractCommandController
      */
     public function backendUsersCommand($matchFields = 'username', $beUserMatchGroupByTitle = false, $file = null)
     {
-        $this->importData('be_users', $matchFields, $beUserMatchGroupByTitle, $file);
+        $this->importData('be_users', $matchFields, $file, $beUserMatchGroupByTitle);
     }
 
     /**
@@ -116,11 +116,11 @@ class ImportCommandController extends AbstractCommandController
      *
      * @param string $table
      * @param string $matchFields Comma separated list of fields used to match configurations to database records.
+     * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      * @param bool $beUserMatchGroupByTitle Match be_group settings in be_users.usergroup by title or uid;
      *             if true be_groups.title is used. Default: **false**
-     * @param string $file Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
      */
-    protected function importData($table, $matchFields, $beUserMatchGroupByTitle = false, $file = null)
+    protected function importData($table, $matchFields, $file = null, $beUserMatchGroupByTitle = false)
     {
         $table = preg_replace('/[^a-z0-9_]/', '', $table);
         $matchFields = explode(',', preg_replace('/[^a-z0-9_,]/', '', $matchFields));
