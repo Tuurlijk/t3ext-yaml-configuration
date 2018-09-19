@@ -30,8 +30,4 @@ if (TYPO3_MODE === 'BE') {
         \MaxServ\YamlConfiguration\Command\ExportCommandController::class;
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] =
         \MaxServ\YamlConfiguration\Command\ImportCommandController::class;
-
-    // Register command map hook
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][] =
-        \MaxServ\YamlConfiguration\Hook\TceMain::class;
 }
