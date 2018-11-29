@@ -22,12 +22,10 @@ defined('TYPO3_MODE') or die();
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
-if (TYPO3_MODE === 'BE') {
-    // Register command controllers
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] =
-        \MaxServ\YamlConfiguration\Command\TsConfigCommandController::class;
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] =
-        \MaxServ\YamlConfiguration\Command\ExportCommandController::class;
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] =
-        \MaxServ\YamlConfiguration\Command\ImportCommandController::class;
-}
+// Register command controllers
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] =
+    \MaxServ\YamlConfiguration\Command\TsConfigCommandController::class;
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] =
+    \MaxServ\YamlConfiguration\Command\ExportCommandController::class;
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][] =
+    \MaxServ\YamlConfiguration\Command\ImportCommandController::class;
