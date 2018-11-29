@@ -21,7 +21,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
     'title' => 'Configure your TYPO3 site using YAML files',
     'description' => 'Export and import any table to and from a YAML file. Generate TSConfig from YAML files.',
     'category' => 'BE',
@@ -33,11 +33,11 @@ $EM_CONF[$_EXTKEY] = array(
     'clearCacheOnLoad' => 1,
     'author_company' => 'MaxServ B.V.',
     'version' => '1.0.12',
-    'constraints' => array(
-        'depends' => array(
-            'typo3' => '6.2.0-8.7.99',
-        ),
-        'conflicts' => array(),
-        'suggests' => array(),
-    ),
-);
+    'constraints' => [
+        'depends' => [
+            'typo3' => '6.2.0-9.5.99',
+        ],
+        'conflicts' => [],
+        'suggests' => [],
+    ],
+];

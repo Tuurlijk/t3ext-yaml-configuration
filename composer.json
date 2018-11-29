@@ -6,8 +6,8 @@
     "GPL-2.0"
   ],
   "require": {
-    "typo3/cms-core": ">=6.2.0,<8.8.0",
-    "symfony/yaml": "2.6 - 3.99"
+    "typo3/cms-core": "^6.2 || ^8.7 || ^9.5",
+    "symfony/yaml": "2.6 - 4.99"
   },
   "replace": {
     "yaml_configuration": "self.version",
