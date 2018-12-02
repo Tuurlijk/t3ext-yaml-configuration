@@ -39,7 +39,7 @@ class AbstractTableCommand extends Command
     /**
      * Get column names of a table
      *
-     * @return mixed
+     * @return array
      */
     protected function getColumnNames(): array
     {
@@ -57,11 +57,12 @@ class AbstractTableCommand extends Command
             $columnNames = \array_keys($result);
             $this->tableColumnCache[$table] = $columnNames;
         } else {
-            throw new \RuntimeException(
-                'Column names for table ' . $table . 'could not be gathered without using INFORMATION_SCHEMA.COLUMNS.' .
-                'This needs to be still implemented if it is necessary.',
-                1543595862
-            );
+            $result = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
+            $result = $result->getSchemaManager()->listTableColumns($table);
+            foreach ($result as $columnName => $columnProperties) {
+                $columnNames[] = $columnName;
+            }
+            $this->tableColumnCache[$table] = $columnNames;
         }
 
         return $columnNames;
