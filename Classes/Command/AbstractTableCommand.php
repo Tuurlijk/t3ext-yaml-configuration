@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace MaxServ\YamlConfiguration\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
@@ -37,6 +38,16 @@ class AbstractTableCommand extends Command
      * @var array
      */
     protected $tableColumnCache = [];
+
+    protected function configure(): void
+    {
+        $this
+            ->addArgument(
+                'table',
+                InputArgument::REQUIRED,
+                'The name of the table which you want to process'
+            );
+    }
 
     /**
      * Get column names of a table

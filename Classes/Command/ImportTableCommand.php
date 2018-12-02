@@ -24,13 +24,9 @@ class ImportTableCommand extends AbstractTableCommand
 
     protected function configure(): void
     {
+        parent::configure();
         $this
             ->setDescription('Imports data into tables from YAML configuration')
-            ->addArgument(
-                'table',
-                InputArgument::REQUIRED,
-                'The name of the table into which you want to import'
-            )
             ->addArgument(
                 'matchFields',
                 InputArgument::REQUIRED,
