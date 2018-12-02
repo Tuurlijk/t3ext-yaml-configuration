@@ -4,18 +4,20 @@ declare(strict_types = 1);
 namespace MaxServ\YamlConfiguration\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Package\PackageInterface;
 use TYPO3\CMS\Core\Package\PackageManager;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class AbstractTableCommand extends Command
 {
-    const CONFIGURATION_DIRECTORY = 'Configuration/YamlConfiguration/';
+    /**
+     * Path to YAML configuration files within an extension
+     */
+    public const CONFIGURATION_DIRECTORY = 'Configuration/YamlConfiguration/';
+
     /**
      * Table into which is imported
      *
