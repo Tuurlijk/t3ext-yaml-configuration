@@ -15,7 +15,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class AbstractTableCommand extends Command
 {
-    const CONFIGURATION_DIRECTORY = 'Resources/Private/YamlConfiguration/';
+    const CONFIGURATION_DIRECTORY = 'Configuration/YamlConfiguration/';
     /**
      * Table into which is imported
      *

@@ -180,7 +180,7 @@ Options
 ``--match-fields``
   Comma separated list of fields used to match configurations to database records. Default: **title**
 ``--file``
-  Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
+  Path to the yml file you wish to import. If none is given, all .yml and .yaml files in directories named 'Configuration/YamlConfiguration/' of every active extension will be parsed
 
 
 
@@ -200,7 +200,7 @@ Options
 ``--match-fields``
   Comma separated list of fields used to match configurations to database records. Default: **username**
 ``--file``
-  Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
+  Path to the yml file you wish to import. If none is given, all .yml and .yaml files in directories named 'Configuration/YamlConfiguration/' of every active extension will be parsed
 ``--be-user-match-group-by-title``
   If set to true, references to table ``be_groups`` in field ``usergroup`` are matched using group titles not uid's. Make sure to use option ``--be-user-match-group-by-title`` set to true when exporting the records. Default: **false**
 
@@ -222,7 +222,7 @@ Options
 ``--match-fields``
   Comma separated list of fields used to match configurations to database records. Default: **title**
 ``--file``
-  Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
+  Path to the yml file you wish to import. If none is given, all .yml and .yaml files in directories named 'Configuration/YamlConfiguration/' of every active extension will be parsed
 
 
 
@@ -242,7 +242,7 @@ Options
 ``--match-fields``
   Comma separated list of fields used to match configurations to database records. Default: **username**
 ``--file``
-  Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
+  Path to the yml file you wish to import. If none is given, all .yml and .yaml files in directories named 'Configuration/YamlConfiguration/' of every active extension will be parsed
 
 
 
@@ -268,7 +268,7 @@ Options
 ^^^^^^^
 
 ``--file``
-  Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
+  Path to the yml file you wish to import. If none is given, all .yml and .yaml files in directories named 'Configuration/YamlConfiguration/' of every active extension will be parsed
 
 
 
@@ -286,7 +286,7 @@ Options
 ^^^^^^^
 
 ``--file``
-  Path to the yml file you wish to import. If none is given, all yml files in directories named 'Configuration' will be parsed
+  Path to the yml file you wish to import. If none is given, all .yml and .yaml files in directories named 'Configuration/YamlConfiguration/' of every active extension will be parsed
 
 
 
