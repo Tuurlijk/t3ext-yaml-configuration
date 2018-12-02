@@ -54,7 +54,7 @@ class ImportTableCommand extends AbstractTableCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $this->table = trim($input->getArgument('table'));
+        $this->setTable(trim($input->getArgument('table')));
         $this->matchFields = GeneralUtility::trimExplode(',', $input->getArgument('matchFields'), true);
         $this->file = $input->getArgument('file');
         // Print information about the command and passed arguments

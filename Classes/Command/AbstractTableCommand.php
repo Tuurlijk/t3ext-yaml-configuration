@@ -211,7 +211,7 @@ class AbstractTableCommand extends Command
      */
     public function setTable(string $table): void
     {
-        $this->table = $table;
+        $this->table = preg_replace('/[^a-z0-9_]/', '', $table);
     }
 
 }
