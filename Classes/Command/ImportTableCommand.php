@@ -3,11 +3,17 @@ declare(strict_types = 1);
 
 namespace MaxServ\YamlConfiguration\Command;
 
+/**
+ * This file is part of the "yaml_configuration" Extension for TYPO3 CMS.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ */
+
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -24,9 +30,13 @@ class ImportTableCommand extends AbstractTableCommand
 
     protected function configure(): void
     {
-        parent::configure();
         $this
             ->setDescription('Imports data into tables from YAML configuration')
+            ->addArgument(
+                'table',
+                InputArgument::REQUIRED,
+                'The name of the table which you want to import'
+            )
             ->addArgument(
                 'matchFields',
                 InputArgument::REQUIRED,
@@ -49,26 +59,11 @@ class ImportTableCommand extends AbstractTableCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
-        $this->setTable(trim($input->getArgument('table')));
         $this->matchFields = GeneralUtility::trimExplode(',', $input->getArgument('matchFields'), true);
-        $this->file = $input->getArgument('file');
-        // Print information about the command and passed arguments
         $io = new SymfonyStyle($input, $output);
-        $io->title($this->getName());
-        $io->table(
-            ['Table Name', 'Matching Fields', 'File Path'],
-            [
-                [
-                    $input->getArgument('table'),
-                    $input->getArgument('matchFields'),
-                    $input->getArgument('file') ?? '<info>no path given</info>'
-                ]
-            ]
-        );
+        $io = $this->informationalHeader($io, $input);
 
         $this->importData($io, $input, $output);
-
     }
 
     /**
@@ -169,41 +164,23 @@ class ImportTableCommand extends AbstractTableCommand
     }
 
     /**
-     * Check if configuration file exists and returns the result of the Yaml parser
-     *
-     * @param $configurationFile
-     * @return array|null
+     * @param SymfonyStyle $io
+     * @param InputInterface $input
+     * @return void
      */
-    protected function parseConfigurationFile($configurationFile): ?array
+    protected function informationalHeader(SymfonyStyle $io, InputInterface $input): void
     {
-        $configuration = null;
-        if (!empty($configurationFile) && is_file($configurationFile)) {
-            $configuration = Yaml::parseFile($configurationFile);
-        }
-
-        return $configuration;
-    }
-
-    /**
-     * Flatten yaml fields into string values
-     *
-     * @param array $row
-     * @param string $glue
-     *
-     * @return array
-     */
-    protected function flattenYamlFields(array $row, $glue = ','): array
-    {
-        $flat = [];
-        foreach ($row as $key => $value) {
-            if (\is_array($value)) {
-                $flat[$key] = implode($glue, $value);
-            } else {
-                $flat[$key] = $value;
-            }
-        }
-
-        return $flat;
+        $io->title($this->getName());
+        $io->table(
+            ['Table Name', 'Matching Fields', 'File Path'],
+            [
+                [
+                    $input->getArgument('table'),
+                    $input->getArgument('matchFields'),
+                    $input->getArgument('file') ?? '<info>no path given</info>'
+                ]
+            ]
+        );
     }
 
 }

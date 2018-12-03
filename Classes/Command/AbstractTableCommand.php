@@ -3,9 +3,19 @@ declare(strict_types = 1);
 
 namespace MaxServ\YamlConfiguration\Command;
 
+/**
+ * This file is part of the "yaml_configuration" Extension for TYPO3 CMS.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ */
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Package\PackageInterface;
@@ -18,6 +28,11 @@ class AbstractTableCommand extends Command
      * Path to YAML configuration files within an extension
      */
     public const CONFIGURATION_DIRECTORY = 'Configuration/YamlConfiguration/';
+
+    /**
+     * Table name for TYPO3 backend user groups
+     */
+    protected const TYPO3_BACKEND_USERGROUP_TABLE = 'be_groups';
 
     /**
      * Table into which is imported
@@ -39,14 +54,18 @@ class AbstractTableCommand extends Command
      */
     protected $tableColumnCache = [];
 
-    protected function configure(): void
+    /**
+     * Initialize variables used in the rest of the command methods
+     *
+     * This method is executed before the interact() and the execute() method.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $this
-            ->addArgument(
-                'table',
-                InputArgument::REQUIRED,
-                'The name of the table which you want to process'
-            );
+        $this->setTable(trim($input->getArgument('table')));
+        $this->file = $input->getArgument('file');
     }
 
     /**
@@ -81,6 +100,14 @@ class AbstractTableCommand extends Command
         return $columnNames;
     }
 
+    /**
+     * Check if matchFields exists in the table
+     *
+     * @param array $matchFields
+     * @param array $columnNames
+     * @param SymfonyStyle $io
+     * @return bool
+     */
     protected function doMatchFieldsExists(array $matchFields, array $columnNames, SymfonyStyle $io): bool
     {
         $nonExisting = [];
@@ -206,6 +233,44 @@ class AbstractTableCommand extends Command
         }
 
         return $newArray;
+    }
+
+    /**
+     * Check if configuration file exists and returns the result of the Yaml parser
+     *
+     * @param $configurationFile
+     * @return array|null
+     */
+    protected function parseConfigurationFile($configurationFile): ?array
+    {
+        $configuration = null;
+        if (!empty($configurationFile) && is_file($configurationFile)) {
+            $configuration = Yaml::parseFile($configurationFile);
+        }
+
+        return $configuration;
+    }
+
+    /**
+     * Flatten yaml fields into string values
+     *
+     * @param array $row
+     * @param string $glue
+     *
+     * @return array
+     */
+    protected function flattenYamlFields(array $row, $glue = ','): array
+    {
+        $flat = [];
+        foreach ($row as $key => $value) {
+            if (\is_array($value)) {
+                $flat[$key] = implode($glue, $value);
+            } else {
+                $flat[$key] = $value;
+            }
+        }
+
+        return $flat;
     }
 
     /**
