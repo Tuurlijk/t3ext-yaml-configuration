@@ -357,12 +357,20 @@ class ExportTableCommand extends AbstractTableCommand
         return count($this->useOnlyColumns) > 0;
     }
 
+    /**
+     * Check whether the given export file path
+     *
+     *  - is outside of web root (if applicationContext IS NOT Development)
+     *  - is available
+     *  - exists already
+     */
     protected function checkGivenFilepathBeforeExport(): void
     {
         $filePath = GeneralUtility::getFileAbsFileName($this->file);
         $fileSystem = new Filesystem();
         $filePathDirectory = GeneralUtility::dirname($filePath);
-        if (strpos($filePath, Environment::getPublicPath() . '/') !== false) {
+        if (strpos($filePath, Environment::getPublicPath() . '/') !== false
+            && !GeneralUtility::getApplicationContext()->isDevelopment()) {
             throw new \RuntimeException(
                 'Please specify an absolute file path outside of the web root.',
                 1543830137
