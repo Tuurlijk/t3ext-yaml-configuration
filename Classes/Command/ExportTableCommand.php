@@ -38,6 +38,15 @@ class ExportTableCommand extends AbstractTableCommand
     protected $skipColumns = [];
 
     /**
+     * Columns to use in export
+     *
+     * Set this property to ignore $this->skipColumns and use explicitly this columns for export
+     *
+     * @var array
+     */
+    protected $useOnlyColumns = [];
+
+    /**
      * @var bool
      */
     protected $includeDeleted = false;
@@ -74,6 +83,9 @@ class ExportTableCommand extends AbstractTableCommand
     {
         parent::initialize($input, $output);
         $this->setSkipColumns(GeneralUtility::trimExplode(',', $input->getOption('skip-columns'), true));
+        if ($input->getOption('use-only-columns')) {
+            $this->setUseOnlyColumns(GeneralUtility::trimExplode(',', $input->getOption('use-only-columns'), true));
+        }
         $this->includeDeleted = (bool)$input->getOption('include-deleted');
         $this->includeHidden = (bool)$input->getOption('include-hidden');
         $this->forceOverride = (bool)$input->getOption('force-override');
@@ -111,6 +123,13 @@ class ExportTableCommand extends AbstractTableCommand
                 InputOption::VALUE_OPTIONAL,
                 'A list of column names to skip',
                 self::EXPORT_SKIP_COLUMNS_DEFAULT
+            )
+            ->addOption(
+                'use-only-columns',
+                'only',
+                InputOption::VALUE_OPTIONAL,
+                'A list of column names to use in the export. Overrides --skip-columns option',
+                null
             )
             ->addOption(
                 'include-deleted',
@@ -177,6 +196,10 @@ class ExportTableCommand extends AbstractTableCommand
         $yaml = '';
         $io->title('Exporting ' . $table . ' configuration');
 
+        if ($this->useOnlyColumnsModeActive()) {
+            $io->note('--use-only-columns mode active. --skip-columns and its defaults will be ignored for this export.');
+        }
+
         $result = $this->queryBuilderForTable($table);
         if ($includeDeleted || $includeHidden) {
             if ($includeDeleted) {
@@ -196,9 +219,15 @@ class ExportTableCommand extends AbstractTableCommand
             foreach ($result as $row) {
                 $explodedRow = [];
                 foreach ($row as $column => $value) {
-                    // Exclude column if it should be skipped
-                    if (\in_array($column, $skipColumns, true)) {
+                    // If --use-only-columns option is used, the column is only added if it is part of the option value.
+                    // Using --use-only-columns overrides the functionality of --skip-columns completely (also for defaults)
+                    if ($this->useOnlyColumnsModeActive() && !\in_array($column, $this->useOnlyColumns, true)) {
                         continue;
+                    // Fallback to normal --skip-columns mode
+                    } elseif (\in_array($column, $skipColumns, true)) {
+                        // The column is skipped if it's name is found in $this->skipColumns.
+                        continue;
+
                     }
 
                     // Pass non-string values and non-special cases ​​as they are
@@ -275,26 +304,44 @@ class ExportTableCommand extends AbstractTableCommand
     {
         $io->title($this->getName());
         $io->table(
-            ['Table', 'File', 'Skipped Columns', 'Incl. deleted', 'Incl. hidden', 'Indent Level'],
+            ['Table', 'File', 'Skipped Columns <comment>*</comment>', 'Use only Columns', 'Incl. deleted', 'Incl. hidden', 'Indent Level <comment>*</comment>'],
             [
                 [
                     $this->table,
                     !empty($this->file) ? $this->file : '(<info>no path given</info>)',
-                    $input->getOption('skip-columns') ?? self::EXPORT_SKIP_COLUMNS_DEFAULT . ' (<info>default</info>)',
+                    $input->getOption('skip-columns'),
+                    $input->getOption('use-only-columns') ?? 'no',
                     $input->getOption('include-deleted') ? 'yes' : 'no',
                     $input->getOption('include-hidden') ? 'yes' : 'no',
                     $input->getOption('indent-level')
                 ]
             ]
         );
+        $io->writeln(' <comment>*</comment> Option has default fallbacks');
     }
 
     /**
      * @param array $skipColumns
      */
-    public function setSkipColumns(array $skipColumns): void
+    protected function setSkipColumns(array $skipColumns): void
     {
         $this->skipColumns = $skipColumns;
+    }
+
+    /**
+     * @param array $useOnlyColumns
+     */
+    public function setUseOnlyColumns(array $useOnlyColumns): void
+    {
+        $this->useOnlyColumns = $useOnlyColumns;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function useOnlyColumnsModeActive(): bool
+    {
+        return count($this->useOnlyColumns) > 0;
     }
 
     protected function checkGivenFilepathBeforeExport(): void
