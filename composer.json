@@ -5,6 +5,20 @@
   "license": [
     "GPL-2.0"
   ],
+	"authors": [
+		{
+			"name": "Michiel Roos",
+			"email": "michiel@michielroos.com",
+			"role": "Developer",
+			"homepage": "https://www.michielroos.com"
+		},
+		{
+			"name": "Josef Glatz",
+			"email": "jousch@gmail.com",
+			"role": "Developer",
+			"homepage": "https://jousch.com"
+		}
+	],
   "require": {
     "typo3/cms-core": "^9.5",
     "symfony/yaml": "2.6 - 4.99"
