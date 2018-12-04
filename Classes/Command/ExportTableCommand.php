@@ -147,7 +147,8 @@ class ExportTableCommand extends AbstractTableCommand
                 'indent-level',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Indent level to make the yaml file human readable'
+                'Indent level to make the yaml file human readable',
+                2
             )
             ->addOption(
                 'force-override',
@@ -214,7 +215,7 @@ class ExportTableCommand extends AbstractTableCommand
             ->from($table)
             ->execute();
         // Rows were found in the table
-        if ($result) {
+        if ($result->rowCount()) {
             $explodedResult = [];
             foreach ($result as $row) {
                 $explodedRow = [];
@@ -227,7 +228,6 @@ class ExportTableCommand extends AbstractTableCommand
                     } elseif (\in_array($column, $skipColumns, true)) {
                         // The column is skipped if it's name is found in $this->skipColumns.
                         continue;
-
                     }
 
                     // Pass non-string values and non-special cases ​​as they are
@@ -250,12 +250,11 @@ class ExportTableCommand extends AbstractTableCommand
                             $usergroupsTitles[] = $singleUserGroup['title'];
                         }
                         $explodedValue = $usergroupsTitles;
-                        if (\strlen($usergroupsTitles[0])) {
+                        if (!empty($usergroupsTitles) && $usergroupsTitles[0] !== '') {
                             $value = $usergroupsTitles[0];
                         } else {
                             $value = '';
                         }
-
 
                         if (count($explodedValue) > 1) {
                             $explodedRow[$column] = $explodedValue;
@@ -264,8 +263,10 @@ class ExportTableCommand extends AbstractTableCommand
                         }
                         continue;
                     }
+                    // The column value is treated as normal string if the string $value was not processed until now
                     $explodedRow[$column] = $value;
                 }
+                // Add row iteration to result
                 $explodedResult[] = $explodedRow;
             }
             $dump = [
@@ -275,9 +276,11 @@ class ExportTableCommand extends AbstractTableCommand
                     ],
                 ],
             ];
+            // Convert the resulting array into a friendly YAML
             $yaml = Yaml::dump($dump, 20, $this->indentLevel);
         }
-        if ($yaml !== '') {
+        // Generated YAML is written to file
+        if ($yaml !== '' && $result->rowCount() > 0) {
             $io->note('Export to ' . GeneralUtility::getFileAbsFileName($this->file));
             $persistYamlFile = GeneralUtility::writeFile(
                 $filePath = GeneralUtility::getFileAbsFileName($this->file),
