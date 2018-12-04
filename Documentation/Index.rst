@@ -29,13 +29,13 @@ YAML Configuration
 			yaml, configuration, import, export, tsconfig
 
 	:Copyright:
-			MaxServ B.V.
+			Michiel Roos
 
 	:Author:
 			Michiel Roos
 
 	:Email:
-			michiel@maxserv.com
+			michiel@michielroos.com
 
 	:License:
 			This document is published under the Open Content License

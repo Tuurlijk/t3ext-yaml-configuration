@@ -1,0 +1,46 @@
+
+
+2.0.0 - 2018/12/??
+------------------
+
+This version only supports TYPO3 9.5 LTS anymore.
+
+Important bugfixes / tasks
+==========================
+
+::
+
+   * CommandControllers were rewritten to Symfony Console Commands
+   * Doctrine DBAL is used everywhere
+   * TSConfig conditions were dropped as they need also a complete rewrite. Currently there is no substitute
+
+
+All Changes
+===========
+
+::
+
+   * WIP WIP WIP WIP WIP
+   * 2018-12-04 [TASK] Improve the ExportTaskCommand (Commit 507c862)
+   * 2018-12-04 [FEATURE] ExportTableCommand: Configure columns to use for export (Commit 6be20e1)
+   * 2018-12-03 [!!!][TASK] Limit version constraints to TYPO3 9.5 LTS (Commit b479296)
+   * 2018-12-03 [!!!][TASK] Rewrite export command for TYPO3 9.5 LTS (Commit 6d231bd)
+   * 2018-12-03 [TASK] Move argument "table" into the AbstractTableCommand (Commit de55644)
+   * 2018-12-03 [TASK] Add PHPDoc and remove unused imports (Commit 9e0c5ce)
+   * 2018-12-02 [TASK] Use Doctrine SchemaManager to retrieve columnNames (Commit 02f0c39)
+   * 2018-12-02 [TASK] Avoid sql injections through yaml files (Commit cb3522a)
+   * 2018-12-02 [!!!][TASK] Change configuration directory (Commit e8a776d)
+   * 2018-12-02 [TASK] Rewrite import command for TYPO3 9.5 LTS (Commit bef1559)
+   * 2018-11-29 [DOCUMENTATION] Fix repo urls (Commit a67d157)
+   * 2018-11-29 [TASK] Remove unnecessary TYPO3_MODE check in ext_localconf.php (Commit f4310c7)
+   * 2018-11-29 [TASK] raise version constraints and switch to short array syntax (Commit a05ed40)
+   * 2018-09-19 Merge pull request #30 from Tuurlijk/master (Commit 7efbcb1)
+   * 2018-08-13 Remove redundant hook code (Commit c72f616)
+   * 2018-04-10 Merge pull request #27 from josefglatz/patch-1 (Commit 72656b6)
+   * 2018-04-10 [BUGFIX] Fix regression which was introduced with  (#24) (Commit 465d687)
+   * 2018-03-26 Merge pull request #25 from oliverschroeder/dev-24 (Commit 56677f4)
+
+This list has been created by using: ::
+
+	git log --since="2018/03/13" --abbrev-commit --pretty='%ad %s (Commit %h)' --date=short
+
