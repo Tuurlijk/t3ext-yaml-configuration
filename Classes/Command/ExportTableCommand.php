@@ -10,6 +10,7 @@ namespace MaxServ\YamlConfiguration\Command;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,7 +29,7 @@ class ExportTableCommand extends AbstractTableCommand
     /**
      * A comma separated list of column names of a table to skip per default while exporting
      */
-    protected const EXPORT_SKIP_COLUMNS_DEFAULT = 'crdate,lastlogin,tstamp,uc';
+    protected const EXPORT_SKIP_COLUMNS_DEFAULT = 'crdate,cruser_id,lastlogin,tstamp,uc';
 
     /**
      * Columns to skip in export
@@ -243,7 +244,16 @@ class ExportTableCommand extends AbstractTableCommand
                         $usergroups = $this->queryBuilderForTable(self::TYPO3_BACKEND_USERGROUP_TABLE)
                             ->select('title')
                             ->from(self::TYPO3_BACKEND_USERGROUP_TABLE)
-                            ->where('uid IN (' . $value . ')')
+                            ->where(
+                                $this->queryBuilderForTable('be_users')
+                                    ->expr()->in(
+                                        'uid',
+                                        $this->queryBuilderForTable('be_users')->createNamedParameter(
+                                            GeneralUtility::intExplode(',', $value),
+                                            Connection::PARAM_INT_ARRAY
+                                        )
+                                    )
+                            )
                             ->execute();
                         $usergroupsTitles = [];
                         foreach ($usergroups as $singleUserGroup) {
