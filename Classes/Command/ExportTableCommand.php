@@ -188,7 +188,7 @@ class ExportTableCommand extends AbstractTableCommand
      *
      * @param SymfonyStyle $io
      */
-    protected function exportTable(SymfonyStyle $io)
+    protected function exportTable(SymfonyStyle $io): void
     {
         $table = $this->table;
         $skipColumns = $this->skipColumns;
@@ -293,7 +293,7 @@ class ExportTableCommand extends AbstractTableCommand
             $io->note('Export to ' . GeneralUtility::getFileAbsFileName($this->file));
             $persistYamlFile = GeneralUtility::writeFile(
                 $filePath = GeneralUtility::getFileAbsFileName($this->file),
-                (string)$yaml
+                $yaml
             );
             if ($persistYamlFile) {
                 $io->listing(
