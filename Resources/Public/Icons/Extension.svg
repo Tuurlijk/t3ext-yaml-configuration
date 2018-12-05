@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="29px" height="27px" viewBox="0 0 29 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="yml" fill-rule="nonzero">
+            <path d="M19,23 L19,25.0025781 C19,26.1090746 18.1057238,27 17.0025781,27 L1.99742191,27 C0.89092539,27 0,26.1012878 0,24.9926701 L0,2.00732994 C0,0.89833832 0.8992496,0 2.0085302,0 L12,0 L12,6.00189865 C12,7.1132936 12.8980806,8 14.0059191,8 L19,8 L19,10 L10.0068483,10 C8.3462119,10 7,11.3422643 7,12.9987856 L7,20.0012144 C7,21.6573979 8.3359915,23 10.0068483,23 L19,23 Z" id="document-file-yml-path" fill="#157EFB"></path>
+            <path d="M13,0 L13,5.99707067 C13,6.55097324 13.4509752,7 13.990778,7 L19,7 L13,0 Z" id="document-file-yml-path" fill="#157EFB"></path>
+            <path d="M9.9945615,11 C8.8929956,11 8,11.9001762 8,12.992017 L8,20.007983 C8,21.1081436 8.9023438,22 9.9945615,22 L27.0054385,22 C28.1070044,22 29,21.0998238 29,20.007983 L29,12.992017 C29,11.8918564 28.0976562,11 27.0054385,11 L9.9945615,11 Z" id="document-file-yml-path" fill="#157EFB"></path>
+            <polygon id="document-file-yml-path" fill="#FFFFFF" points="13 17 13 20 12 20 12 17 10 14 10 13 11 13 11 14 12.5 16.25 14 14 14 13 15 13 15 14"></polygon>
+            <polygon id="document-file-yml-path" fill="#FFFFFF" points="17 13 16.5 13 16 13 16 20 17 20 17 15 18 17 18.5 17 19 17 20 15 20 20 21 20 21 13 20.5 13 20 13 18.5 16"></polygon>
+            <polygon id="document-file-yml-path" fill="#FFFFFF" points="27 19 27 20 22 20 22 13 23 13 23 19"></polygon>
+        </g>
+    </g>
+</svg>
