@@ -32,6 +32,7 @@ class ImportTableCommand extends AbstractTableCommand
     {
         $this
             ->setDescription('Imports data into tables from YAML configuration')
+            ->setAliases(['yaml_configuration:yaml:import', 'yaml_configuration:import:table'])
             ->addArgument(
                 'table',
                 InputArgument::REQUIRED,

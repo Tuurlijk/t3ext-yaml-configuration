@@ -107,6 +107,7 @@ class ExportTableCommand extends AbstractTableCommand
     {
         $this
             ->setDescription('Exports a database table into a YAML file')
+            ->setAliases(['yaml_configuration:yaml:export', 'yaml_configuration:export:table'])
             ->addArgument(
                 'table',
                 InputArgument::REQUIRED,
