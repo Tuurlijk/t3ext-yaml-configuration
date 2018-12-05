@@ -22,7 +22,9 @@ identifier is determined during runtime).
 To see the shortest possible identifiers on your system as well as further
 commands that may be available, use::
 
-  ./typo3 list
+.. code-block:: bash
+
+	./typo3 list
 
 .. note::
   Some commands accept parameters (argument and options). See ``./typo3 <command identifier> --help`` for more information about a specific command.
