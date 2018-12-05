@@ -123,14 +123,14 @@ class ExportTableCommand extends AbstractTableCommand
                 'skip-columns',
                 'skip',
                 InputOption::VALUE_OPTIONAL,
-                'A list of column names to skip',
+                'A comma separated list of column names to skip',
                 self::EXPORT_SKIP_COLUMNS_DEFAULT
             )
             ->addOption(
                 'use-only-columns',
                 'only',
                 InputOption::VALUE_OPTIONAL,
-                'A list of column names to use in the export. Overrides --skip-columns option',
+                'A comma separated list of column names to use in the export. Overrides --skip-columns option',
                 null
             )
             ->addOption(

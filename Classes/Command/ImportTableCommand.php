@@ -41,7 +41,7 @@ class ImportTableCommand extends AbstractTableCommand
             ->addArgument(
                 'matchFields',
                 InputArgument::REQUIRED,
-                'Comma separated list of fields used to match configurations to database records.'
+                'A comma separated list of fields used to match configurations to database records.'
             )
             ->addArgument(
                 'file',
