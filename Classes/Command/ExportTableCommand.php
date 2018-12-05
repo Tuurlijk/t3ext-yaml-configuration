@@ -180,17 +180,15 @@ class ExportTableCommand extends AbstractTableCommand
         $this->informationalHeader($io, $input);
         $this->checkGivenFilepathBeforeExport();
         // Export the table
-        $this->exportTable($io, $input, $output);
+        $this->exportTable($io);
     }
 
     /**
      * Export table to yaml file
      *
      * @param SymfonyStyle $io
-     * @param InputInterface $input
-     * @param OutputInterface $output
      */
-    protected function exportTable(SymfonyStyle $io, InputInterface $input, OutputInterface $output)
+    protected function exportTable(SymfonyStyle $io)
     {
         $table = $this->table;
         $skipColumns = $this->skipColumns;

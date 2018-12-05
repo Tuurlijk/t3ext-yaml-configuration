@@ -62,17 +62,17 @@ class ImportTableCommand extends AbstractTableCommand
     {
         $this->matchFields = GeneralUtility::trimExplode(',', $input->getArgument('matchFields'), true);
         $io = new SymfonyStyle($input, $output);
-        $io = $this->informationalHeader($io, $input);
+        $this->informationalHeader($io, $input);
 
-        $this->importData($io, $input, $output);
+        $this->importData($io);
     }
 
     /**
+     * Process the YAML file and run import DB queries
+     *
      * @param SymfonyStyle $io
-     * @param InputInterface $input
-     * @param OutputInterface $output
      */
-    protected function importData(SymfonyStyle $io, InputInterface $input, OutputInterface $output): void
+    protected function importData(SymfonyStyle $io): void
     {
         $table = $this->table;
         $matchFields = $this->matchFields;
