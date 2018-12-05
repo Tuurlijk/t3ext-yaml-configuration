@@ -20,7 +20,19 @@ All Changes
 
 ::
 
-   * WIP WIP WIP WIP WIP
+   * 2018-12-05 [DOCUMENTATION] Update User Manual section (Commit 3f50c09)
+   * 2018-12-05 [BUGFIX] Remove unused use statement and add proper return types (Commit febbf9b)
+   * 2018-12-05 [BUGFIX] Fix method call and PHPDoc blocks (Commit 898cb52)
+   * 2018-12-05 [DOCUMENTATION] Update the documentation to reflect the new code base (Commit 83f7a03)
+   * 2018-12-05 [TASK] Optimize argument description (Commit 3069272)
+   * 2018-12-05 [TASK] Add command aliases (as fallback) (Commit f6da95a)
+   * 2018-12-05 [TASK] Add generic svg extension icon (Commit 8f524a1)
+   * 2018-12-05 [TASK] ExportTableCommand: allow yaml files within the web root (Commit 51b8c0c)
+   * 2018-12-04 [BUGFIX] ExportTableCommand: use QueryBuilder named parameters (Commit c979019)
+   * 2018-12-04 [TASK] Remove TSConfig feature relevant examples (Commit 953e89c)
+   * 2018-12-04 [TASK] Add authors to composer.json (Commit c6dc52c)
+   * 2018-12-04 [!!!][TASK] Remove superfluous classes and the TSConfig condition feature (Commit 7af4d8e)
+   * 2018-12-04 [WIP][TASK] Update documentation (Commit babb68a)
    * 2018-12-04 [TASK] Improve the ExportTaskCommand (Commit 507c862)
    * 2018-12-04 [FEATURE] ExportTableCommand: Configure columns to use for export (Commit 6be20e1)
    * 2018-12-03 [!!!][TASK] Limit version constraints to TYPO3 9.5 LTS (Commit b479296)
