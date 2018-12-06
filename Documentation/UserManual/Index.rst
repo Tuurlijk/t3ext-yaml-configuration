@@ -17,7 +17,7 @@ You can execute the command from the root of your website:
 
 .. code-block:: bash
 
-	./bin/typo3
+	./<DocumentRoot>/typo3/sysext/core/bin/typo3
 
 In a composer based TYPO3 installation the TYPO3 CLI executable can be found in the configured folder of your composer.json file in ``config.bin-dir``.
 This is very likely outside the website root.

@@ -11,7 +11,7 @@ Command Reference
 =================
 
 .. note::
-  This reference uses the official TYPO3 CLI command ``./typo3`` as the command to
+  This reference uses the official TYPO3 CLI command ``./<DocumentRoot>/typo3/sysext/core/bin/typo3`` as the command to
   invoke.
 
 The commands in this reference are shown with their full command identifiers.
