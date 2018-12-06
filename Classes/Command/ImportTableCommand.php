@@ -94,6 +94,8 @@ class ImportTableCommand extends AbstractTableCommand
             $io->note('Parsing: ' . str_replace(Environment::getPublicPath() . '/', '', $configurationFile));
             $records = $this->getDataConfiguration($configuration, $table);
             $io->writeln('Found ' . count($records) . ' records in the parsed file.');
+            $countUpdates = 0;
+            $countInserts = 0;
             foreach ($records as $record) {
                 $record = $this->flattenYamlFields($record);
                 $row = false;
