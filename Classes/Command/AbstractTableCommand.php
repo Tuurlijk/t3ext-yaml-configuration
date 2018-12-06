@@ -150,7 +150,9 @@ class AbstractTableCommand extends Command
                 true
             );
             if (!empty($collectedFiles)) {
-                $configurationFiles[] = array_pop($collectedFiles);
+                foreach ($collectedFiles as $collectedFile) {
+                    $configurationFiles[] = $collectedFile;
+                }
             }
         }
         return $configurationFiles;
