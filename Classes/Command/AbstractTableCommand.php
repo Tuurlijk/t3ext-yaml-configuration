@@ -183,13 +183,12 @@ class AbstractTableCommand extends Command
     /**
      * Update timestamp fields
      *
-     * You can force adding timestamp fields by the fourth parameter
+     * You can force updating timestamp fields by the fourth parameter
      *
      * @param array $row
      * @param array $columnNames
      * @param array $fields
-     *
-     * @param bool $forceField
+     * @param bool $forceField Force updating the field if it exists in the database table
      * @return array the updated record row
      */
     protected function updateTimeFields(
@@ -199,10 +198,10 @@ class AbstractTableCommand extends Command
         bool $forceField = false
     ): array {
         foreach ($fields as $field) {
-            if (\array_key_exists($field, $row) && \in_array($field, $columnNames, true)) {
-                $row[$field] = time();
-            } elseif ($forceField) {
-                $row[$field] = time();
+            if (\in_array($field, $columnNames, true)) {
+                if ($forceField || \array_key_exists($field, $row)) {
+                    $row[$field] = time();
+                }
             }
         }
 
