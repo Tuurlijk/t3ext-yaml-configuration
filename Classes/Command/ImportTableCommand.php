@@ -12,6 +12,7 @@ namespace MichielRoos\YamlConfiguration\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Core\Environment;
@@ -39,16 +40,32 @@ class ImportTableCommand extends AbstractTableCommand
                 'The name of the table which you want to import'
             )
             ->addArgument(
-                'matchFields',
-                InputArgument::REQUIRED,
-                'A comma separated list of fields used to match configurations to database records.'
-            )
-            ->addArgument(
                 'file',
                 InputArgument::OPTIONAL,
-                'Path to the yml file you wish to import. If none is given, all yml files in directories named \'Configuration\' will be parsed',
+                'Path to the yml file you wish to import. If none is given, all yml files in directories named \'Configuration/YamlConfiguration\' will be parsed',
                 null
+            )
+            ->addOption(
+                'matchFields',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'A comma separated list of fields used to match configurations to database records.',
+                'uid'
             );
+    }
+
+    /**
+     * Initialize variables used in the rest of the command methods
+     *
+     * This method is executed before the interact() and the execute() method.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        parent::initialize($input, $output);
+        $this->matchFields = GeneralUtility::trimExplode(',', $input->getOption('matchFields'), true);
     }
 
     /**
@@ -60,7 +77,6 @@ class ImportTableCommand extends AbstractTableCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->matchFields = GeneralUtility::trimExplode(',', $input->getArgument('matchFields'), true);
         $io = new SymfonyStyle($input, $output);
         $this->informationalHeader($io, $input);
 
@@ -82,6 +98,7 @@ class ImportTableCommand extends AbstractTableCommand
         $countUpdates = 0;
         $countInserts = 0;
         if ($this->file === null) {
+            // When no YAML file is given: all yaml files in active packages will be take into account
             $configurationFiles = $this->findYamlFiles();
         } else {
             $configurationFiles = [$this->file];

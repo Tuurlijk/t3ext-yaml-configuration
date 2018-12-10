@@ -85,8 +85,6 @@ Arguments
 
 ``table``
   The name of the table which you want to import. (Example: ``be_users``)
-``matchFields``
-  Comma separated list of fields used to match configurations to database records. (Example: ``'uid,title'``)
 ``file``
   Path to the yaml file. If none is given, all yaml/yml files in directories named 'Configuration/YamlConfiguration' of **every active extension** will be parsed.
 
@@ -95,8 +93,8 @@ Arguments
 Options
 ^^^^^^^
 
-``--file``
-  Path to the yml file you wish to import. If none is given, all .yml and .yaml files in directories named 'Configuration/YamlConfiguration/' of every active extension will be parsed
+``matchFields``
+  Comma separated list of fields used to match configurations to database records. Default: **uid** (Example: ``--matchFields='uid,title'``)
 
 
 
