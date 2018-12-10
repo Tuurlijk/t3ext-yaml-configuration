@@ -1,7 +1,7 @@
 {
   "name": "maxserv/yaml_configuration",
   "type": "typo3-cms-extension",
-  "description": "Export and import any table to and from a YAML file. Generate TSConfig from YAML files.",
+  "description": "Configure your TYPO3 site using YAML files. Export and import any table to and from a YAML file.",
   "license": [
     "GPL-2.0"
   ],
