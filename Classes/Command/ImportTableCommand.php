@@ -196,7 +196,7 @@ class ImportTableCommand extends AbstractTableCommand
             [
                 [
                     $input->getArgument('table'),
-                    $input->getArgument('matchFields'),
+                    $input->getOption('matchFields'),
                     $input->getArgument('file') ?? '<info>no path given</info>'
                 ]
             ]
