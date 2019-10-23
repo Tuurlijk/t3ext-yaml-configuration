@@ -23,7 +23,7 @@ namespace MaxServ\YamlConfiguration\Command;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
-use Symfony\Component\Yaml\Yaml;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -138,42 +138,43 @@ class ImportCommandController extends AbstractCommandController
             $records = $this->getDataConfiguration($configuration, $table);
             foreach ($records as $record) {
                 $record = $this->flattenYamlFields($record);
-                $row = false;
-                $matchClauseParts = array();
+                $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
+                $queryBuilder->getRestrictions()->removeAll();
+
+                $constraints = [];
+                $matchingFields = [];
                 foreach ($matchFields as $matchField) {
                     if (isset($record[$matchField])) {
-                        $matchClauseParts[] =
-                            $matchField . ' = "' . $this->databaseConnection->quoteStr($record[$matchField], $table) . '"';
+                        $constraints[] = $queryBuilder->expr()
+                            ->eq($matchField, $queryBuilder->createNamedParameter($record[$matchField]));
+                        $matchingFields[] = $matchField . '="' . addslashes($record[$matchField]) . '"';
                     }
                 }
-                $matchClause = (count($matchClauseParts)) ? implode(' AND ', $matchClauseParts) : '';
-                if ($matchClause) {
-                    $row = $this->databaseConnection->exec_SELECTgetSingleRow(
-                        '*',
-                        $table,
-                        $matchClause
-                    );
-                }
-                if ($row) {
-                    $this->successMessage('Found existing ' . $table . ' record by matchfields: ' . $matchClause);
+                $rowCount = $queryBuilder->select('uid')->from($table)->where(
+                    $queryBuilder->expr()->andX(...$constraints)
+                )->setMaxResults(1)
+                    ->execute()->rowCount();
+                if ($rowCount > 0) {
+                    $this->successMessage('Found existing ' . $table . ' record by matchfields: ' . implode(' AND ', $matchingFields));
                     $this->message('Updating . . .');
+                    $record = $this->updateTimeFields($record, $columnNames, array('tstamp'));
                     if (isset($record['usergroup']) && $beUserMatchGroupByTitle) {
                         $record['usergroup'] = $this->convertUsergroupNamesToUid($record);
                     }
-                    $record = $this->updateTimeFields($record, $columnNames, array('tstamp'));
-                    $this->databaseConnection->exec_UPDATEquery(
-                        $table,
-                        $matchClause,
-                        $record
-                    );
+                    $queryBuilder->update($table);
+                    foreach ($record as $field => $value){
+                        $queryBuilder->set($field, $value);
+                    }
+                    $queryBuilder->execute();
                 } else {
-                    $this->successMessage('Found NO existing ' . $table . ' record by matchfields: ' . $matchClause);
+
+                    $this->successMessage('Found NO existing ' . $table . ' record by matchfields: ' . implode(' AND ', $matchingFields));
                     $this->message('Adding . . .');
                     $record = $this->updateTimeFields($record, $columnNames, array('crdate', 'tstamp'));
-                    $this->databaseConnection->exec_INSERTquery(
-                        $table,
-                        $record
-                    );
+                    $queryBuilder
+                        ->insert($table)
+                        ->values($record)
+                        ->execute();
                 }
             }
         }

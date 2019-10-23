@@ -24,6 +24,7 @@ namespace MaxServ\YamlConfiguration\Command;
  */
 
 use Symfony\Component\Yaml\Yaml;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Package\PackageInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -66,15 +67,6 @@ class AbstractCommandController extends CommandController
     const CONFIGURATION_DIRECTORY = 'Configuration/';
 
     /**
-     * Database connection
-     *
-     * @since 1.0.0
-     *
-     * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected $databaseConnection;
-
-    /**
      * Cache of auto increment fields
      *
      * @since 1.0.0
@@ -100,16 +92,6 @@ class AbstractCommandController extends CommandController
      * @var array
      */
     protected $primaryKeyFieldCache = array();
-
-    /**
-     * ExportCommandController constructor.
-     *
-     * @since 1.0.0
-     */
-    public function __construct()
-    {
-        $this->databaseConnection = $GLOBALS['TYPO3_DB'];
-    }
 
     /**
      * Check if matchFields exist in the table.
@@ -168,7 +150,7 @@ class AbstractCommandController extends CommandController
             return $fields;
         }
     }
-    
+
     /**
      * Get Primary key fields from $table
      *
@@ -213,39 +195,14 @@ class AbstractCommandController extends CommandController
     protected function getColumnNames($table)
     {
         $table = preg_replace('/[^a-z0-9_]/', '', $table);
-        if (isset($this->tableColumnCache[$table])) {
-            return $this->tableColumnCache[$table];
-        } else {
-            $result = $this->databaseConnection->exec_SELECTgetSingleRow(
-                '*',
-                $table,
-                '1 = 1'
-            );
-            if ($result) {
-                $columnNames = array_keys($result);
-                $this->tableColumnCache[$table] = $columnNames;
-            } else {
-                $columnNames = array();
-                $result = $this->databaseConnection->sql_query('SELECT DATABASE();');
-                $row = $this->databaseConnection->sql_fetch_row($result);
-                $databaseName = $row[0];
-                $this->databaseConnection->sql_free_result($result);
-                $result = $this->databaseConnection->sql_query(
-                    "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" .
-                    $databaseName .
-                    "' AND TABLE_NAME = '" .
-                    $table .
-                    "';"
-                );
-                while (($row = $this->databaseConnection->sql_fetch_row($result))) {
-                    $columnNames[] = $row[0];
-                };
-                $this->databaseConnection->sql_free_result($result);
-                $this->tableColumnCache[$table] = $columnNames;
-            }
-
-            return $columnNames;
+        if (!isset($this->tableColumnCache[$table])) {
+            $columns = GeneralUtility::makeInstance(ConnectionPool::class)
+                ->getConnectionForTable($table)
+                ->getSchemaManager()
+                ->listTableColumns($table);
+            $this->tableColumnCache[$table] = array_keys($columns);
         }
+        return $this->tableColumnCache[$table];
     }
 
     /**

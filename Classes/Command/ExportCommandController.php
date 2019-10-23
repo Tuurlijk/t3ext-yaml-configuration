@@ -24,6 +24,9 @@ namespace MaxServ\YamlConfiguration\Command;
  */
 
 use Symfony\Component\Yaml\Yaml;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
+use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -187,64 +190,58 @@ class ExportCommandController extends AbstractCommandController
         }
         $yaml = '';
         $columnNames = $this->getColumnNames($table);
-        $where = '1 = 1';
-        if (!$includeHidden || !$includeDeleted) {
-            $where = array();
-            if (!$includeHidden) {
-                if (in_array('disable', $columnNames)) {
-                    $where[] = 'disable = 0';
-                }
-                if (in_array('hidden', $columnNames)) {
-                    $where[] = 'hidden = 0';
-                }
-            }
-            if (!$includeDeleted) {
-                $where[] = 'deleted = 0';
-            }
-            $where = implode(' AND ', $where);
+
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
+        if($includeHidden){
+            $queryBuilder->getRestrictions()->removeByType(HiddenRestriction::class);
         }
-        $result = $this->databaseConnection->exec_SELECTgetRows('*', $table, $where);
-        if ($result) {
-            $explodedResult = array();
-            foreach ($result as $row) {
-                $explodedRow = array();
-                foreach ($row as $column => $value) {
-                    if (in_array($column, $skipColumns)) {
-                        continue;
-                    }
-
-                    // Do not update usergroups by UID when exporting to other systems
-                    // UID maybe different for the same usergroup name
-                    if ($beUserMatchGroupByTitle && $table == 'be_users' && $column == 'usergroup' && $value) {
-                        $usergroups = $this->databaseConnection->exec_SELECTgetRows('title', 'be_groups', 'uid IN (' . $value . ')');
-                        // @todo Currently the sorting of usergroups in the original records is ignored when exporting usergroups
-                        $usergroupsTitles = [];
-                        foreach ($usergroups as $singleUserGroup) {
-                            $usergroupsTitles[] = $singleUserGroup['title'];
-                        }
-                        $explodedValue = $usergroupsTitles;
-                        $value = $usergroupsTitles[0]; // Overwrite $value for case count() == 1, see below
-                    } else {
-                        $explodedValue = explode(',', $value);
-                    }
-
-                    if (count($explodedValue) > 1) {
-                        $explodedRow[$column] = $explodedValue;
-                    } elseif (strlen($value)) {
-                        $explodedRow[$column] = $value;
-                    }
+        if($includeDeleted){
+            $queryBuilder->getRestrictions()->removeByType(DeletedRestriction::class);
+        }
+        $result = $queryBuilder->select('*')->from($table)->execute();
+        $explodedResult = [];
+        while ($row = $result->fetch(\PDO::FETCH_ASSOC)) {
+            $explodedRow = [];
+            foreach ($row as $column => $value) {
+                if (in_array($column, $skipColumns)) {
+                    continue;
                 }
-                $explodedResult[] = $explodedRow;
+
+                // Do not update usergroups by UID when exporting to other systems
+                // UID maybe different for the same usergroup name
+                if ($beUserMatchGroupByTitle && $table == 'be_users' && $column == 'usergroup' && $value) {
+                    $groupQueryBuilder =  GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
+                    $groupQueryBuilder->getRestrictions()->removeAll();
+                    $usergroups = $this->databaseConnection->exec_SELECTgetRows('title', 'be_groups',
+                        'uid IN (' . $value . ')');
+                    // @todo Currently the sorting of usergroups in the original records is ignored when exporting usergroups
+                    $usergroupsTitles = [];
+                    foreach ($usergroups as $singleUserGroup) {
+                        $usergroupsTitles[] = $singleUserGroup['title'];
+                    }
+                    $explodedValue = $usergroupsTitles;
+                    $value = $usergroupsTitles[0]; // Overwrite $value for case count() == 1, see below
+                } else {
+                    $explodedValue = explode(',', $value);
+                }
+
+                if (count($explodedValue) > 1) {
+                    $explodedRow[$column] = $explodedValue;
+                } elseif (strlen($value)) {
+                    $explodedRow[$column] = $value;
+                }
             }
-            $dump = array(
-                'TYPO3' => array(
-                    'Data' => array(
-                        $table => $explodedResult
-                    )
+            $explodedResult[] = $explodedRow;
+        }
+        $dump = array(
+            'TYPO3' => array(
+                'Data' => array(
+                    $table => $explodedResult
                 )
-            );
-            $yaml = Yaml::dump($dump, $indentLevel);
-        }
+            )
+        );
+        $yaml = Yaml::dump($dump, $indentLevel);
+
 
         if ($yaml !== '') {
             $secret = sha1($yaml);
