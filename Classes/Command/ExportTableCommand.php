@@ -39,6 +39,13 @@ class ExportTableCommand extends AbstractTableCommand
     protected $skipColumns = [];
 
     /**
+     * Columns to explode in the result
+     *
+     * @var array
+     */
+    protected $explodeColumns = [];
+
+    /**
      * Columns to use in export
      *
      * Set this property to ignore $this->skipColumns and use explicitly this columns for export
@@ -84,6 +91,7 @@ class ExportTableCommand extends AbstractTableCommand
     {
         parent::initialize($input, $output);
         $this->setSkipColumns(GeneralUtility::trimExplode(',', $input->getOption('skip-columns'), true));
+        $this->setExplodeColumns(GeneralUtility::trimExplode(',', $input->getOption('explode-columns'), true));
         if ($input->getOption('use-only-columns')) {
             $this->setUseOnlyColumns(GeneralUtility::trimExplode(',', $input->getOption('use-only-columns'), true));
         }
@@ -125,6 +133,12 @@ class ExportTableCommand extends AbstractTableCommand
                 InputOption::VALUE_OPTIONAL,
                 'A comma separated list of column names to skip',
                 self::EXPORT_SKIP_COLUMNS_DEFAULT
+            )
+            ->addOption(
+                'explode-columns',
+                'explode',
+                InputOption::VALUE_OPTIONAL,
+                'A comma separated list of column that should be exploded to array when converted to YAML.'
             )
             ->addOption(
                 'use-only-columns',
@@ -272,8 +286,12 @@ class ExportTableCommand extends AbstractTableCommand
                         }
                         continue;
                     }
-                    // The column value is treated as normal string if the string $value was not processed until now
-                    $explodedRow[$column] = $value;
+                    if (!empty($value) && \in_array($column, $this->explodeColumns, true)) {
+                        $explodedRow[$column] = GeneralUtility::trimExplode(',', $value);
+                    } else {
+                        // The column value is treated as normal string if the string $value was not processed until now
+                        $explodedRow[$column] = $value;
+                    }
                 }
                 // Add row iteration to result
                 $explodedResult[] = $explodedRow;
@@ -338,6 +356,14 @@ class ExportTableCommand extends AbstractTableCommand
     protected function setSkipColumns(array $skipColumns): void
     {
         $this->skipColumns = $skipColumns;
+    }
+
+    /**
+     * @param array $explodeColumns
+     */
+    public function setExplodeColumns(array $explodeColumns): void
+    {
+        $this->explodeColumns = $explodeColumns;
     }
 
     /**
