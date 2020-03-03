@@ -63,6 +63,9 @@ Options
   Force override an existing yaml file. Default: **false** (Example ``--force-override``)
 ``--skip-columns``
   A comma separated list of column names to skip. Default: **crdate,cruser_id,lastlogin,tstamp,uc** (Example: ``--skip-columns='crdate,cruser_id,lastlogin,tstamp,uc,uid'``)
+``--explode-columns``
+  A comma separated list of column names to explode before export. Improves readability and helps with version control systems. (Example: ``explode-columns='non_exclude_fields,file_permissions,explicit_allowdeny'``).
+  Exploded columns can be reimported seamlessly without extra configuration.
 ``--use-only-columns``
   A comma separated list of column names to skip. (Example: ``--use-only-columns='uid,title'``)
 ``--include-deleted``
